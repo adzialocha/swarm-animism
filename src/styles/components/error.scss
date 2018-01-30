@@ -1,0 +1,23 @@
+.error {
+  position: fixed;
+
+  top: 0;
+  left: 0;
+
+  height: 100%;
+  width: 100%;
+
+  text-align: center;
+
+  display: none;
+
+  z-index: 999;
+
+  color: $white;
+
+  background-color: $black;
+}
+
+.error--visible {
+  display: block;
+}

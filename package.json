@@ -1,0 +1,48 @@
+{
+  "name": "swarm-animism",
+  "version": "0.1.0",
+  "description": "CTM HackLab 2018",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "build": "cross-env NODE_ENV=production webpack",
+    "serve": "webpack-dev-server --host 0.0.0.0",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adzialocha/swarm-animism.git"
+  },
+  "author": "",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/adzialocha/swarm-animism/issues"
+  },
+  "homepage": "https://github.com/adzialocha/swarm-animism#readme",
+  "dependencies": {
+    "meyda": "^4.1.3",
+    "normalize.css": "^7.0.0",
+    "p5": "^0.6.0",
+    "tone": "^0.11.11"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "cross-env": "^5.1.3",
+    "css-loader": "^0.28.9",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "file-loader": "^1.1.6",
+    "html-loader": "^0.5.5",
+    "html-webpack-plugin": "^2.30.1",
+    "node-sass": "^4.7.2",
+    "rimraf": "^2.6.2",
+    "sass-loader": "^6.0.6",
+    "style-loader": "^0.20.1",
+    "uglifyjs-webpack-plugin": "^1.1.8",
+    "webpack": "^3.10.0",
+    "webpack-dev-server": "^2.11.1"
+  }
+}

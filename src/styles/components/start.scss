@@ -1,0 +1,22 @@
+.start {
+  position: fixed;
+
+  top: 0;
+  left: 0;
+
+  height: 100%;
+  width: 100%;
+
+  font-family: "Arial", sans-serif;
+  font-size: 40px;
+
+  color: $white;
+
+  background-color: $black;
+
+  border: 0;
+}
+
+.start--clicked {
+  display: none;
+}

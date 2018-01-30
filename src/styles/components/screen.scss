@@ -1,0 +1,11 @@
+.screen {
+  height: 100%;
+
+  transition: background 200ms ease-out;
+}
+
+.screen--flash {
+  background-color: $white;
+
+  transition: background 10ms ease-out;
+}
