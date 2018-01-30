@@ -8,8 +8,10 @@ export default class Audio {
     // Create simple mic and analysis chain
     this.mic = new Tone.UserMedia()
     this.analyser = new Tone.Waveform(256)
+    this.gain = new Tone.Volume()
 
-    this.mic.connect(this.analyser)
+    this.mic.connect(this.gain)
+    this.gain.connect(this.analyser)
 
     this.mic.open()
 
@@ -37,7 +39,7 @@ export default class Audio {
       const values = this.analyser.getValue()
       const runtime = Date.now() - this.startTime
 
-      this.agent.update(values, runtime)
+      this.agent.update(values, runtime, this.gain)
 
       this.update()
     }, this)
