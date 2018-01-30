@@ -1,6 +1,6 @@
 import Tone from 'tone'
 
-const SENSITIVITY = 0.05
+const SENSITIVITY = 0.1
 
 export default class ImpulseAgent {
   constructor(visuals) {
@@ -8,6 +8,9 @@ export default class ImpulseAgent {
     this.synth = new Tone.PolySynth(6, Tone.Synth, {
       oscillator: {
         partials: [0, 2, 3, 4],
+      },
+      envelope : {
+        attack : 0.5,
       },
     }).toMaster()
   }
@@ -21,7 +24,7 @@ export default class ImpulseAgent {
 
     if (features.rms > SENSITIVITY) {
       this.visuals.flash()
-      this.synth.triggerAttackRelease('C4', 1)
+      this.synth.triggerAttackRelease('C4', 0.1)
     }
   }
 }
