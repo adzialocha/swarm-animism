@@ -60,7 +60,7 @@ module.exports = {
     [VENDOR_FOLDER_NAME]: APP_DEPENDENCIES,
   },
   output: {
-    path: getPath(`./${DIST_FOLDER}/play`),
+    path: getPath(`./${DIST_FOLDER}`),
     filename: '[name].js',
   },
   module: {
