@@ -2,10 +2,10 @@ import Tone from 'tone'
 
 const INITIAL_NOTE = 80
 const NOTE_FILTER_RANGE = 1
+const INITIAL_VELOCITY = 0.025
 
-const INITIAL_VELOCITY = 0.1
-const ACCELERATION = 0.001
-const SMOOTHING = 0.9
+// const SMOOTHING = 0.9
+// const ACCELERATION = 0.001
 
 const converter = new Tone.Frequency()
 
@@ -62,18 +62,10 @@ export default class FlockingAgent {
   }
 
   update(signal, runtime, gainNode) {
-    const leftMeterValue = this.meterLeft.getValue()
-    const rightMeterValue = this.meterRight.getValue()
+    const leftMeterValue = this.meterLeft.getLevel()
+    const rightMeterValue = this.meterRight.getLevel()
 
-    // const smoothedMeterValue = (
-    //   SMOOTHING * this.meterLeft.getValue() + (1 - SMOOTHING) * currentMeterValue
-    // )
-
-    // const smoothedMeterValue = (
-    //   SMOOTHING * this.meterRight.getValue() + (1 - SMOOTHING) * currentMeterValue
-    // )
-
-    if (leftMeterValue > rightMeterValue) {
+    if (leftMeterValue < rightMeterValue) {
       this.velocity = INITIAL_VELOCITY
     } else {
       this.velocity = -INITIAL_VELOCITY
@@ -81,9 +73,9 @@ export default class FlockingAgent {
 
     const nextFrequency = converter.midiToFrequency(this.currentNote)
 
-    console.log('=========')
-    console.log(leftMeterValue, rightMeterValue, this.velocity)
-    console.log(this.filterLeft.frequency.value, nextFrequency, this.filterRight.frequency.value)
+    // console.log('=========')
+    // console.log(leftMeterValue, rightMeterValue, this.velocity)
+    // console.log(this.filterLeft.frequency.value, nextFrequency, this.filterRight.frequency.value)
 
     this.currentNote += this.velocity
 
