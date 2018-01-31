@@ -4,9 +4,6 @@ const INITIAL_NOTE = 80
 const NOTE_FILTER_RANGE = 1
 const INITIAL_VELOCITY = 0.025
 
-// const SMOOTHING = 0.9
-// const ACCELERATION = 0.001
-
 const converter = new Tone.Frequency()
 
 export default class FlockingAgent {
@@ -53,10 +50,6 @@ export default class FlockingAgent {
     this.filterRight.connect(this.meterRight)
   }
 
-  onAnalysis(values) {
-    // console.log(values)
-  }
-
   start() {
     this.synth.triggerAttack(converter.midiToFrequency(this.currentNote))
   }
@@ -79,8 +72,11 @@ export default class FlockingAgent {
 
     this.currentNote += this.velocity
 
-    this.filterLeft.frequency.setValueAtTime(converter.midiToFrequency(this.currentNote - NOTE_FILTER_RANGE), '+0')
-    this.filterRight.frequency.setValueAtTime(converter.midiToFrequency(this.currentNote + NOTE_FILTER_RANGE), '+0')
+    const left = converter.midiToFrequency(this.currentNote - NOTE_FILTER_RANGE)
+    const right = converter.midiToFrequency(this.currentNote + NOTE_FILTER_RANGE)
+
+    this.filterLeft.frequency.setValueAtTime(left, '+0')
+    this.filterRight.frequency.setValueAtTime(right, '+0')
 
     this.synth.setNote(nextFrequency)
   }
