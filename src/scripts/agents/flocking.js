@@ -1,8 +1,8 @@
 import Tone from 'tone'
 
 const INITIAL_NOTE = 80
-const NOTE_FILTER_RANGE = 1
-const INITIAL_VELOCITY = 0.025
+const FILTER_RANGE = 1
+const VELOCITY = 0.05
 
 const converter = new Tone.Frequency()
 
@@ -21,7 +21,7 @@ export default class FlockingAgent {
     }).toMaster()
 
     this.filterLeft = new Tone.Filter({
-      frequency: converter.midiToFrequency(INITIAL_NOTE - NOTE_FILTER_RANGE),
+      frequency: converter.midiToFrequency(INITIAL_NOTE - FILTER_RANGE),
       type: 'bandpass',
       rolloff: -24,
       Q: 1,
@@ -29,7 +29,7 @@ export default class FlockingAgent {
     })
 
     this.filterRight = new Tone.Filter({
-      frequency: converter.midiToFrequency(INITIAL_NOTE + NOTE_FILTER_RANGE),
+      frequency: converter.midiToFrequency(INITIAL_NOTE + FILTER_RANGE),
       type: 'bandpass',
       rolloff: -24,
       Q: 1,
@@ -38,7 +38,7 @@ export default class FlockingAgent {
 
     this.lastMeterValue = 0
     this.currentNote = INITIAL_NOTE
-    this.velocity = INITIAL_VELOCITY
+    this.velocity = VELOCITY
 
     this.meterLeft = new Tone.Meter()
     this.meterRight = new Tone.Meter()
@@ -59,9 +59,9 @@ export default class FlockingAgent {
     const rightMeterValue = this.meterRight.getLevel()
 
     if (leftMeterValue < rightMeterValue) {
-      this.velocity = INITIAL_VELOCITY
+      this.velocity = VELOCITY
     } else {
-      this.velocity = -INITIAL_VELOCITY
+      this.velocity = -VELOCITY
     }
 
     const nextFrequency = converter.midiToFrequency(this.currentNote)
@@ -72,8 +72,8 @@ export default class FlockingAgent {
 
     this.currentNote += this.velocity
 
-    const left = converter.midiToFrequency(this.currentNote - NOTE_FILTER_RANGE)
-    const right = converter.midiToFrequency(this.currentNote + NOTE_FILTER_RANGE)
+    const left = converter.midiToFrequency(this.currentNote - FILTER_RANGE)
+    const right = converter.midiToFrequency(this.currentNote + FILTER_RANGE)
 
     this.filterLeft.frequency.setValueAtTime(left, '+0')
     this.filterRight.frequency.setValueAtTime(right, '+0')
