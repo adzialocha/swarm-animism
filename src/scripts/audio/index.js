@@ -1,5 +1,7 @@
 import Tone from 'tone'
 
+const UPDATE_RATE = 20
+
 export default class Audio {
   setup() {
     // Start our runtime
@@ -31,7 +33,7 @@ export default class Audio {
   }
 
   update() {
-    window.requestAnimationFrame(() => {
+    setTimeout(() => {
       if (!this.agent) {
         return
       }
@@ -42,6 +44,6 @@ export default class Audio {
       this.agent.update(values, runtime, this.gain)
 
       this.update()
-    }, this)
+    }, UPDATE_RATE, this)
   }
 }

@@ -5,7 +5,7 @@ import Tone from 'tone'
 import Visuals from './visuals'
 import Audio from './audio'
 
-import HarmonyAgent from './agents/harmony'
+import FlockingAgent from './agents/flocking'
 import ImpulseAgent from './agents/impulse'
 
 const SCREEN_ID = 'main'
@@ -22,7 +22,7 @@ const visuals = new Visuals(screenElem)
 const audio = new Audio()
 
 function startPerformance() {
-  const agent = new ImpulseAgent(visuals)
+  const agent = new FlockingAgent(audio.gain)
   audio.setAgent(agent)
 }
 
