@@ -70,8 +70,8 @@ export default class FlockingAgent {
     this.setFilterPoles(this.options.initialNote)
 
     // LFO for controlling the synth gain
-    // this.gainLFO = new Tone.LFO(this.options.gainLFOFrequency, 0, 1)
-    // this.gainLFO.connect(this.synthGainNode.gain)
+    this.gainLFO = new Tone.LFO(this.options.gainLFOFrequency, 0, 1)
+    this.gainLFO.connect(this.synthGainNode.gain)
   }
 
   start() {
@@ -81,7 +81,7 @@ export default class FlockingAgent {
     )
 
     // Start the LFO
-    // this.gainLFO.start()
+    this.gainLFO.start()
   }
 
   setFilterPoles(centerNote) {
@@ -123,13 +123,13 @@ export default class FlockingAgent {
     this.setFilterPoles(this.currentNote)
 
     // Debug output
-    console.log('=========')
-    console.log(leftMeterValue, rightMeterValue, this.currentVelocity)
+    // console.log('=========')
+    // console.log(leftMeterValue, rightMeterValue, this.currentVelocity)
     // console.log(leftMeterValue - rightMeterValue)
 
     // Change the synth note
     const nextFrequency = converter.midiToFrequency(this.currentNote)
     this.synth.setNote(nextFrequency)
-    console.log(nextFrequency)
+    // console.log(nextFrequency)
   }
 }
