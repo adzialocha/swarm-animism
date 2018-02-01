@@ -1,22 +1,18 @@
 .start {
-  position: fixed;
+  display: none;
 
-  top: 0;
-  left: 0;
+  padding: 20px;
 
-  height: 100%;
-  width: 100%;
-
-  font-family: "Arial", sans-serif;
-  font-size: 40px;
-
-  color: $white;
-
-  background-color: $black;
+  background-color: $gray;
 
   border: 0;
+
+  &:active {
+    color: $black;
+    background-color: $white;
+  }
 }
 
-.start--clicked {
-  display: none;
+.start--visible {
+  display: block;
 }

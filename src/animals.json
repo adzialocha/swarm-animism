@@ -1,0 +1,20 @@
+[
+  {
+    "name": "test",
+    "agent": "flocking",
+    "options": {
+      "filterQ": 1,
+      "filterRange": 7,
+      "filterRolloff": -48,
+      "minInitialNote": 48,
+      "maxInitialNote": 96,
+      "minLFOFrequency": 0.1,
+      "maxLFOFrequency": 0.5,
+      "minVelocity": 0.001,
+      "maxVelocity": 0.005,
+      "velocityRange": 1,
+      "minVolume": 0.25,
+      "maxVolume": 0.9
+    }
+  }
+]

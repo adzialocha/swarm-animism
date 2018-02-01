@@ -7,16 +7,21 @@ const defaultOptions = {
   filterQ: 1,
   filterRange: 7,
   filterRolloff: -48,
-  initialNote: Math.random() * 48 + 48,
-  lfoFrequency: randomRange(0.1, 0.5),
-  velocity: randomRange(0.001, 0.005),
+  minInitialNote: 48,
+  maxInitialNote: 96,
+  minLFOFrequency: 0.1,
+  maxLFOFrequency: 0.5,
+  minVelocity: 0.001,
+  maxVelocity: 0.005,
   velocityRange: 1,
+  minVolume: 0.25,
+  maxVolume: 0.9,
 }
 
 const converter = new Tone.Frequency()
 
 export default class FlockingAgent {
-  constructor(options = {}, gainNode) {
+  constructor(options = {}, visuals, gainNode) {
     this.options = Object.assign({}, defaultOptions, options)
 
     // Synthesized sound of our agent (output)
@@ -37,9 +42,20 @@ export default class FlockingAgent {
 
     this.synth.connect(this.synthGainNode)
 
+    // Choose some random parameters
+    this.velocity = randomRange(
+      this.options.minVelocity,
+      this.options.maxVelocity
+    )
+
+    this.initialNote = randomRange(
+      this.options.minInitialNote,
+      this.options.maxInitialNote
+    )
+
     // Agent states
-    this.currentNote = this.options.initialNote
-    this.currentVelocity = this.options.velocity
+    this.currentNote = this.initialNote
+    this.currentVelocity = this.velocity
 
     // Filters to analyse the signal at two poles around the center
     this.filterLeft = new Tone.Filter({
@@ -68,17 +84,27 @@ export default class FlockingAgent {
     this.filterRight.connect(this.meterRight)
 
     // Set the filter poles to initial positions
-    this.setFilterPoles(this.options.initialNote)
+    this.setFilterPoles(this.initialNote)
 
     // LFO for controlling the synth gain
-    this.gainLFO = new Tone.LFO(this.options.lfoFrequency, 0.25, 1)
+    const lfoFrequency = randomRange(
+      this.options.minLFOFrequency,
+      this.options.maxLFOFrequency
+    )
+
+    this.gainLFO = new Tone.LFO(
+      lfoFrequency,
+      this.options.minVolume,
+      this.options.maxVolume
+    )
+
     this.gainLFO.connect(this.synthGainNode.gain)
   }
 
   start() {
     // The synthesizer play all the time, trigger its note
     this.synth.triggerAttack(
-      converter.midiToFrequency(this.options.initialNote)
+      converter.midiToFrequency(this.initialNote)
     )
 
     // Start the LFO
@@ -113,7 +139,7 @@ export default class FlockingAgent {
     // Velocity is depended on distance to the target frequency
     this.currentVelocity = Math.min(
       Math.max(
-        (rightMeterValue - leftMeterValue) * this.options.velocity,
+        (rightMeterValue - leftMeterValue) * this.velocity,
         -this.options.velocityRange
       ),
       this.options.velocityRange
@@ -123,13 +149,13 @@ export default class FlockingAgent {
     this.currentNote += this.currentVelocity
     this.setFilterPoles(this.currentNote)
 
-    // Debug output
-    // console.log('=========')
-    // console.log(leftMeterValue, rightMeterValue, this.currentVelocity)
-
     // Change the synth note
     const nextFrequency = converter.midiToFrequency(this.currentNote)
     this.synth.setNote(nextFrequency)
+
+    // Debug output
+    // console.log('=========')
+    // console.log(leftMeterValue, rightMeterValue, this.currentVelocity)
     // console.log(nextFrequency)
   }
 }

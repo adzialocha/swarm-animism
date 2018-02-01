@@ -7,7 +7,7 @@ const NOISEINESS_TRESHOLD = 0.12
 const TRIGGER_CHROMA_KEYS = [0, 2]
 
 export default class ImpulseAgent {
-  constructor(visuals) {
+  constructor(options = {}, visuals, gainNode) {
     this.visuals = visuals
 
     this.meter = new Tone.Meter()
@@ -52,7 +52,7 @@ export default class ImpulseAgent {
       return acc
     }, []).sort((a, b) => b.value - a.value)
 
-    // Check if the strongest keys match the ones we need
+    // Check if the strongest keys match the ones we need (this does not work yet)
     const isChromaTriggered = TRIGGER_CHROMA_KEYS.reduce((acc, value, index) => {
       return acc && strongestKeys[index].key == value
     }, true)
@@ -63,9 +63,9 @@ export default class ImpulseAgent {
 
     // Check some requirements before we really can make sound
     if (
-      rms > RMS_SENSITIVITY &&
-      noiseiness < NOISEINESS_TRESHOLD &&
-      isChromaTriggered
+      rms > RMS_SENSITIVITY
+      // && noiseiness < NOISEINESS_TRESHOLD
+      // && isChromaTriggered
     ) {
       this.visuals.flash()
       this.synth.triggerAttackRelease('C3', 0.1)

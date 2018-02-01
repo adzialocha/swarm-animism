@@ -8,6 +8,10 @@ import Audio from './audio'
 import FlockingAgent from './agents/flocking'
 import ImpulseAgent from './agents/impulse'
 
+import { randomItem } from './utils'
+
+import animals from '../animals.json'
+
 const SCREEN_ID = 'main'
 const ERROR_ID = 'error'
 const START_ID = 'start'
@@ -19,10 +23,30 @@ const startElem = document.getElementById(START_ID)
 
 // Basic interfaces
 const visuals = new Visuals(screenElem)
-const audio = new Audio()
 
 function startPerformance() {
-  const agent = new FlockingAgent({}, audio.gain)
+  // Create an audio environment
+  const audio = new Audio()
+  audio.setup(visuals)
+
+  // Pick a random animal
+  const animal = randomItem(animals)
+  const { options } = animal
+
+  // Show the animal
+  visuals.setAnimal(animal.name)
+
+  let agent
+
+  switch (animal.agent) {
+    case 'impulse':
+      agent = new ImpulseAgent(options, visuals, audio.gain)
+      break
+    default:
+      agent = new FlockingAgent(options, visuals, audio.gain)
+      break
+  }
+
   audio.setAgent(agent)
 }
 
@@ -30,13 +54,15 @@ function showErrorMessage() {
   errorElem.classList.add('error--visible')
 }
 
-// Start sound environment
+// Check if WebAudio API is supported on this device
 if (!Tone.UserMedia.supported) {
   showErrorMessage()
 } else {
+  startElem.classList.add('start--visible')
+
   startElem.addEventListener('click', () => {
-    audio.setup(visuals)
-    startElem.classList.add('start--clicked')
     startPerformance()
+
+    startElem.classList.remove('start--visible')
   })
 }

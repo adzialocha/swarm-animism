@@ -1,7 +1,18 @@
 .screen {
+  position: absolute;
+
+  display: none;
+
   height: 100%;
+  width: 100%;
 
   transition: background 200ms ease-out;
+
+  opacity: .5;
+}
+
+.screen--visible {
+  display: initial;
 }
 
 .screen--flash {
