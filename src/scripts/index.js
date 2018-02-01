@@ -23,10 +23,8 @@ const audio = new Audio()
 
 function startPerformance() {
   const options = {
-    filterRange: 7,
     initialNote: Math.random() * 48 + 48,
     playNoteOffset: 7 * (Math.floor(Math.random() * 3) - 1),
-    velocity: 0.03,
   }
 
   const agent = new FlockingAgent(options, audio.gain)

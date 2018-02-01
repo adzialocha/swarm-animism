@@ -3,12 +3,12 @@ import Tone from 'tone'
 import { a as aWeighting } from 'a-weighting'
 
 const defaultOptions = {
-  filterQ: 0.7,
+  filterQ: 1,
   filterRange: 7,
   filterRolloff: -48,
+  gainLFOFrequency: 0.1,
   initialNote: 72,
-  playNoteOffset: 4,
-  velocity: 0.03,
+  velocity: 0.005,
   velocityRange: 1,
 }
 
@@ -29,7 +29,12 @@ export default class FlockingAgent {
         sustain: 1,
         release: 1,
       },
-    }).toMaster()
+    })
+
+    this.synthGainNode = new Tone.Gain()
+    this.synthGainNode.toMaster()
+
+    this.synth.connect(this.synthGainNode)
 
     // Agent states
     this.currentNote = this.options.initialNote
@@ -63,6 +68,10 @@ export default class FlockingAgent {
 
     // Set the filter poles to initial positions
     this.setFilterPoles(this.options.initialNote)
+
+    // LFO for controlling the synth gain
+    // this.gainLFO = new Tone.LFO(this.options.gainLFOFrequency, 0, 1)
+    // this.gainLFO.connect(this.synthGainNode.gain)
   }
 
   start() {
@@ -70,6 +79,9 @@ export default class FlockingAgent {
     this.synth.triggerAttack(
       converter.midiToFrequency(this.options.initialNote)
     )
+
+    // Start the LFO
+    // this.gainLFO.start()
   }
 
   setFilterPoles(centerNote) {
@@ -111,11 +123,13 @@ export default class FlockingAgent {
     this.setFilterPoles(this.currentNote)
 
     // Debug output
+    console.log('=========')
     console.log(leftMeterValue, rightMeterValue, this.currentVelocity)
-    console.log(leftMeterValue - rightMeterValue)
+    // console.log(leftMeterValue - rightMeterValue)
 
     // Change the synth note
     const nextFrequency = converter.midiToFrequency(this.currentNote)
     this.synth.setNote(nextFrequency)
+    console.log(nextFrequency)
   }
 }
