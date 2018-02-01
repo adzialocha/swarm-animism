@@ -13,9 +13,8 @@ const VENDOR_FOLDER_NAME = 'lib'
 const APP_DEPENDENCIES = [
   'tone',
   'meyda',
-  'p5',
   'a-weighting',
-  'ramda'
+  'ramda',
 ]
 
 const isProduction = process.env.NODE_ENV === 'production'

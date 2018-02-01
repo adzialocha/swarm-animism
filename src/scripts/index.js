@@ -6,7 +6,6 @@ import Visuals from './visuals'
 import Audio from './audio'
 
 import FlockingAgent from './agents/flocking'
-import ChromaAgent from './agents/chroma'
 import ImpulseAgent from './agents/impulse'
 
 const SCREEN_ID = 'main'
@@ -23,8 +22,15 @@ const visuals = new Visuals(screenElem)
 const audio = new Audio()
 
 function startPerformance() {
-  // const agent = new FlockingAgent(audio.gain)
-  const agent = new ChromaAgent(audio.gain)
+  const options = {
+    filterRange: 7,
+    initialNote: Math.random() * 48 + 48,
+    playNoteOffset: 7 * (Math.floor(Math.random() * 3) - 1),
+    velocity: 0.03,
+  }
+
+  const agent = new FlockingAgent(options, audio.gain)
+
   audio.setAgent(agent)
 }
 

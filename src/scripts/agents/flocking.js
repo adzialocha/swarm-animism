@@ -1,23 +1,28 @@
 import Tone from 'tone'
 
-import {a as aWeighting} from "a-weighting"
+import { a as aWeighting } from 'a-weighting'
 
-console.log("a-weighting",aWeighting);
+const defaultOptions = {
+  filterQ: 0.7,
+  filterRange: 7,
+  filterRolloff: -48,
+  initialNote: 72,
+  playNoteOffset: 4,
+  velocity: 0.03,
+}
 
-const INITIAL_NOTE = Math.random()*48+48
-const FILTER_RANGE = 7
-const VELOCITY = 0.03
-
-const PLAY_NOTE_OFFSET = 7*(Math.floor(Math.random()*3)-1);
 const converter = new Tone.Frequency()
 
 export default class FlockingAgent {
-  constructor(gainNode) {
+  constructor(options, gainNode) {
+    this.options = Object.assign({}, defaultOptions, options)
+
+    // Synthesized sound of our agent (output)
     this.synth = new Tone.Synth({
       oscillator: {
         type: 'sine',
       },
-        envelope: {
+      envelope: {
         attack: 0.005,
         decay: 0.1,
         sustain: 1,
@@ -25,25 +30,26 @@ export default class FlockingAgent {
       },
     }).toMaster()
 
+    // Agent states
+    this.currentNote = this.options.initialNote
+    this.currentVelocity = this.options.velocity
+
+    // Filters to analyse the signal at two poles around the center
     this.filterLeft = new Tone.Filter({
-      frequency: converter.midiToFrequency(INITIAL_NOTE - FILTER_RANGE),
+      frequency: 440,
       type: 'bandpass',
-      rolloff: -48,
-      Q: 0.7,
+      rolloff: this.options.filterRolloff,
+      Q: this.options.filterQ,
       gain: 0,
     })
 
     this.filterRight = new Tone.Filter({
-      frequency: converter.midiToFrequency(INITIAL_NOTE + FILTER_RANGE),
+      frequency: 440,
       type: 'bandpass',
-      rolloff: -48,
-      Q: 0.7,
+      rolloff: this.options.filterRolloff,
+      Q: this.options.filterQ,
       gain: 0,
     })
-
-    this.lastMeterValue = 0
-    this.currentNote = INITIAL_NOTE
-    this.velocity = VELOCITY
 
     this.meterLeft = new Tone.Meter()
     this.meterRight = new Tone.Meter()
@@ -53,51 +59,58 @@ export default class FlockingAgent {
 
     this.filterLeft.connect(this.meterLeft)
     this.filterRight.connect(this.meterRight)
+
+    // Set the filter poles to initial positions
+    this.setFilterPoles(this.options.initialNote)
   }
 
   start() {
-    this.synth.triggerAttack(converter.midiToFrequency(this.currentNote))
+    // The synthesizer play all the time, trigger its note
+    this.synth.triggerAttack(
+      converter.midiToFrequency(this.options.initialNote)
+    )
+  }
+
+  setFilterPoles(centerNote) {
+    const { filterRange } = this.options
+
+    const left = converter.midiToFrequency(centerNote - filterRange)
+    const right = converter.midiToFrequency(centerNote + filterRange)
+
+    this.filterLeft.frequency.setValueAtTime(left, '+0')
+    this.filterRight.frequency.setValueAtTime(right, '+0')
   }
 
   update(signal, runtime, gainNode) {
-
-
+    // Get meter and frequency values of our filter poles
     const leftMeterValue = this.meterLeft.getLevel()
     const rightMeterValue = this.meterRight.getLevel()
     const leftFilterFreq = this.filterLeft.frequency.value
     const rightFilterFreq = this.filterRight.frequency.value
 
-    const weightedLeftMeterValue = aWeighting(leftFilterFreq) * leftMeterValue;
-    const weightedRightMeterValue = aWeighting(rightFilterFreq) * rightMeterValue;
+    // Make all frequencies equally loud
+    const weightedLeftMeterValue = aWeighting(leftFilterFreq) * leftMeterValue
+    const weightedRightMeterValue = aWeighting(rightFilterFreq) * rightMeterValue
 
-    if  (!(isFinite(rightMeterValue) && isFinite(leftMeterValue)))
-      return;
-    this.velocity = Math.min(Math.max((rightMeterValue - leftMeterValue) *VELOCITY,-3),3);
-    // if (leftMeterValue < rightMeterValue) {
-    //   this.velocity = VELOCITY
-    // } else {
-    //   this.velocity = -VELOCITY
-    // }
+    if (!(isFinite(rightMeterValue) && isFinite(leftMeterValue))) {
+      return
+    }
 
+    // Velocity is depended on distance to the target frequency
+    this.currentVelocity = Math.min(
+      Math.max((rightMeterValue - leftMeterValue) * this.options.velocity, -3), 3
+    )
 
-    console.log(leftMeterValue, rightMeterValue, this.velocity)
- 
-    console.log(leftMeterValue-rightMeterValue);
+    // Update the frequencies
+    this.currentNote += this.currentVelocity
+    this.setFilterPoles(this.currentNote)
 
-    
-    this.currentNote += this.velocity
+    // Debug output
+    console.log(leftMeterValue, rightMeterValue, this.currentVelocity)
+    console.log(leftMeterValue - rightMeterValue)
+
+    // Change the synth note
     const nextFrequency = converter.midiToFrequency(this.currentNote)
-
-    // console.log('=========')
-    
-    
-   
-    const left = converter.midiToFrequency(this.currentNote - FILTER_RANGE)
-    const right = converter.midiToFrequency(this.currentNote + FILTER_RANGE)
-
-    this.filterLeft.frequency.setValueAtTime(left, '+0')
-    this.filterRight.frequency.setValueAtTime(right, '+0')
-
     this.synth.setNote(nextFrequency)
   }
 }
