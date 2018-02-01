@@ -6,7 +6,8 @@ const defaultOptions = {
   filterQ: 1,
   filterRange: 7,
   filterRolloff: -48,
-  gainLFOFrequency: 0.1,
+  gainLFOMinFrequency: 0.1,
+  gainLFOMaxFrequency: 0.8,
   initialNote: 72,
   velocity: 0.005,
   velocityRange: 1,
@@ -70,7 +71,15 @@ export default class FlockingAgent {
     this.setFilterPoles(this.options.initialNote)
 
     // LFO for controlling the synth gain
-    this.gainLFO = new Tone.LFO(this.options.gainLFOFrequency, 0, 1)
+    const lfoFrequency = (
+      (
+        Math.random() * (
+          this.options.gainLFOMaxFrequency - this.options.gainLFOMinFrequency
+        )
+      ) + this.options.gainLFOMinFrequency
+    )
+
+    this.gainLFO = new Tone.LFO(lfoFrequency, 0, 1)
     this.gainLFO.connect(this.synthGainNode.gain)
   }
 
@@ -125,7 +134,6 @@ export default class FlockingAgent {
     // Debug output
     // console.log('=========')
     // console.log(leftMeterValue, rightMeterValue, this.currentVelocity)
-    // console.log(leftMeterValue - rightMeterValue)
 
     // Change the synth note
     const nextFrequency = converter.midiToFrequency(this.currentNote)
