@@ -1,6 +1,8 @@
 import Tone from 'tone'
 
 const UPDATE_RATE = 20
+const HP_FREQUENCY = 300
+const LP_FREQUENCY = 8000
 
 export default class Audio {
   setup() {
@@ -12,8 +14,25 @@ export default class Audio {
     this.analyser = new Tone.Waveform(512)
     this.gain = new Tone.Volume()
 
+    // Make the frequency band a little bit more narrow
+    const highpass = new Tone.Filter({
+      frequency: HP_FREQUENCY,
+      type: 'highpass',
+      rolloff: -12,
+      Q: 0.5,
+    })
+
+    const lowpass = new Tone.Filter({
+      frequency: LP_FREQUENCY,
+      type: 'lowpass',
+      rolloff: -12,
+      Q: 0.5,
+    })
+
     // Use gain to control volume of microphone
-    this.mic.connect(this.gain)
+    this.mic.connect(highpass)
+    highpass.connect(lowpass)
+    lowpass.connect(this.gain)
     this.gain.connect(this.analyser)
 
     // Listen ...

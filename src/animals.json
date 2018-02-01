@@ -6,7 +6,7 @@
       "filterQ": 1,
       "filterRange": 7,
       "filterRolloff": -48,
-      "minInitialNote": 48,
+      "minInitialNote": 72,
       "maxInitialNote": 96,
       "minLFOFrequency": 0.1,
       "maxLFOFrequency": 0.5,
