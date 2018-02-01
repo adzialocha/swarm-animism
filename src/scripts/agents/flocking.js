@@ -1,22 +1,22 @@
 import Tone from 'tone'
 
 import { a as aWeighting } from 'a-weighting'
+import { randomRange } from '../utils'
 
 const defaultOptions = {
   filterQ: 1,
   filterRange: 7,
   filterRolloff: -48,
-  gainLFOMinFrequency: 0.1,
-  gainLFOMaxFrequency: 0.8,
-  initialNote: 72,
-  velocity: 0.005,
+  initialNote: Math.random() * 48 + 48,
+  lfoFrequency: randomRange(0.1, 0.5),
+  velocity: randomRange(0.001, 0.005),
   velocityRange: 1,
 }
 
 const converter = new Tone.Frequency()
 
 export default class FlockingAgent {
-  constructor(options, gainNode) {
+  constructor(options = {}, gainNode) {
     this.options = Object.assign({}, defaultOptions, options)
 
     // Synthesized sound of our agent (output)
@@ -71,15 +71,7 @@ export default class FlockingAgent {
     this.setFilterPoles(this.options.initialNote)
 
     // LFO for controlling the synth gain
-    const lfoFrequency = (
-      (
-        Math.random() * (
-          this.options.gainLFOMaxFrequency - this.options.gainLFOMinFrequency
-        )
-      ) + this.options.gainLFOMinFrequency
-    )
-
-    this.gainLFO = new Tone.LFO(lfoFrequency, 0, 1)
+    this.gainLFO = new Tone.LFO(this.options.lfoFrequency, 0.25, 1)
     this.gainLFO.connect(this.synthGainNode.gain)
   }
 

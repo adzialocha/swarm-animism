@@ -22,13 +22,7 @@ const visuals = new Visuals(screenElem)
 const audio = new Audio()
 
 function startPerformance() {
-  const options = {
-    initialNote: Math.random() * 48 + 48,
-    playNoteOffset: 7 * (Math.floor(Math.random() * 3) - 1),
-  }
-
-  const agent = new FlockingAgent(options, audio.gain)
-
+  const agent = new FlockingAgent({}, audio.gain)
   audio.setAgent(agent)
 }
 
