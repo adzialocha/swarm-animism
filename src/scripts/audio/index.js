@@ -1,11 +1,11 @@
-import Tone from 'tone'
-
 const UPDATE_RATE = 20
 const HP_FREQUENCY = 300
 const LP_FREQUENCY = 8000
 
 export default class Audio {
   setup() {
+    const Tone = require('tone')
+
     // Start our runtime
     this.startTime = Date.now()
 
