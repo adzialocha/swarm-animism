@@ -14,6 +14,8 @@ const APP_DEPENDENCIES = [
   'tone',
   'meyda',
   'p5',
+  'a-weighting',
+  'ramda'
 ]
 
 const isProduction = process.env.NODE_ENV === 'production'
