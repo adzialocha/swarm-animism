@@ -9,3 +9,4 @@
 * Add more voices in octave
 * LFO per voice, maybe the outer ones need a different speed?
 * Add Majda features to control certain parameters (like distortion, controlled by "sharpness feature")
+* Use noise sometimes instead of sines

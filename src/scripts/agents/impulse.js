@@ -1,4 +1,3 @@
-import Tone from 'tone'
 import Meyda from 'meyda'
 
 const RMS_SENSITIVITY = 0.05
@@ -10,6 +9,8 @@ const DELAY_TIME_BASE=0.500;
 
 export default class ImpulseAgent {
   constructor(options = {}, visuals, gainNode) {
+    const Tone = require('tone')
+
     this.visuals = visuals
 
     this.meter = new Tone.Meter()

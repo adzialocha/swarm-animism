@@ -8,14 +8,6 @@ const webpack = require('webpack')
 const SERVER_PORT = 9000
 const DIST_FOLDER = 'docs'
 const SRC_FOLDER = 'src'
-const VENDOR_FOLDER_NAME = 'lib'
-
-const APP_DEPENDENCIES = [
-  'tone',
-  'meyda',
-  'a-weighting',
-  'ramda',
-]
 
 const isProduction = process.env.NODE_ENV === 'production'
 
@@ -26,11 +18,6 @@ const extractSassPlugin = new ExtractTextPlugin({
 })
 
 const plugins = [
-  new webpack.optimize.CommonsChunkPlugin({
-    name: VENDOR_FOLDER_NAME,
-    fileName: '[name].[hash].js',
-    minChunks: Infinity,
-  }),
   new webpack.optimize.AggressiveMergingPlugin({}),
   new webpack.optimize.OccurrenceOrderPlugin(true),
   new HtmlPlugin({
@@ -54,12 +41,7 @@ if (isProduction) {
 }
 
 module.exports = {
-  entry: {
-    [SRC_FOLDER]: [
-      getPath(`./${SRC_FOLDER}/scripts/index.js`),
-    ],
-    [VENDOR_FOLDER_NAME]: APP_DEPENDENCIES,
-  },
+  entry: getPath(`./${SRC_FOLDER}/scripts/index.js`),
   output: {
     path: getPath(`./${DIST_FOLDER}`),
     filename: '[name].js',

@@ -1,5 +1,3 @@
-import Tone from 'tone'
-
 import { a as aWeighting } from 'a-weighting'
 import { randomRange } from '../utils'
 
@@ -18,10 +16,12 @@ const defaultOptions = {
   maxVolume: 0.9,
 }
 
-const converter = new Tone.Frequency()
-
 export default class FlockingAgent {
   constructor(options = {}, visuals, gainNode) {
+    const Tone = require('tone')
+
+    this.converter = new Tone.Frequency()
+
     this.options = Object.assign({}, defaultOptions, options)
 
     // Synthesized sound of our agent (output)
@@ -104,7 +104,7 @@ export default class FlockingAgent {
   start() {
     // The synthesizer play all the time, trigger its note
     this.synth.triggerAttack(
-      converter.midiToFrequency(this.initialNote)
+      this.converter.midiToFrequency(this.initialNote)
     )
 
     // Start the LFO
@@ -114,8 +114,8 @@ export default class FlockingAgent {
   setFilterPoles(centerNote) {
     const { filterRange } = this.options
 
-    const left = converter.midiToFrequency(centerNote - filterRange)
-    const right = converter.midiToFrequency(centerNote + filterRange)
+    const left = this.converter.midiToFrequency(centerNote - filterRange)
+    const right = this.converter.midiToFrequency(centerNote + filterRange)
 
     this.filterLeft.frequency.setValueAtTime(left, '+0')
     this.filterRight.frequency.setValueAtTime(right, '+0')
@@ -150,7 +150,7 @@ export default class FlockingAgent {
     this.setFilterPoles(this.currentNote)
 
     // Change the synth note
-    const nextFrequency = converter.midiToFrequency(this.currentNote)
+    const nextFrequency = this.converter.midiToFrequency(this.currentNote)
     this.synth.setNote(nextFrequency)
 
     // Debug output

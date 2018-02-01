@@ -1,7 +1,5 @@
 import '../styles/index.scss'
 
-import Tone from 'tone'
-
 import Visuals from './visuals'
 import Audio from './audio'
 
@@ -54,8 +52,11 @@ function showErrorMessage() {
   errorElem.classList.add('error--visible')
 }
 
+const isAudioSupported = window.AudioContext || window.webkitAudioContext
+const isUserMediaSupported = window.navigator.mediaDevices && window.navigator.mediaDevices.getUserMedia
+
 // Check if WebAudio API is supported on this device
-if (!Tone.UserMedia.supported) {
+if (!isAudioSupported || !isUserMediaSupported) {
   showErrorMessage()
 } else {
   startElem.classList.add('start--visible')
