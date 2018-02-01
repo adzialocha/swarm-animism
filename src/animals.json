@@ -1,7 +1,7 @@
 [
   {
     "name": "test",
-    "agent": "flocking",
+    "agent": "impulse",
     "options": {
       "filterQ": 1,
       "filterRange": 7,

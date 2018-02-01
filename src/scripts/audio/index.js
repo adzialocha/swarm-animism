@@ -11,7 +11,7 @@ export default class Audio {
 
     // Create simple mic, gain and analysis chain
     this.mic = new Tone.UserMedia()
-    this.analyser = new Tone.Waveform(512)
+    this.analyser = new Tone.Waveform(1024)
     this.gain = new Tone.Volume()
 
     // Make the frequency band a little bit more narrow
