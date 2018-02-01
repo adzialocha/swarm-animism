@@ -9,6 +9,7 @@ const defaultOptions = {
   initialNote: 72,
   playNoteOffset: 4,
   velocity: 0.03,
+  velocityRange: 1,
 }
 
 const converter = new Tone.Frequency()
@@ -98,7 +99,11 @@ export default class FlockingAgent {
 
     // Velocity is depended on distance to the target frequency
     this.currentVelocity = Math.min(
-      Math.max((rightMeterValue - leftMeterValue) * this.options.velocity, -3), 3
+      Math.max(
+        (rightMeterValue - leftMeterValue) * this.options.velocity,
+        -this.options.velocityRange
+      ),
+      this.options.velocityRange
     )
 
     // Update the frequencies
