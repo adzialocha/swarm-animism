@@ -1,11 +1,17 @@
 .start {
   display: none;
 
+  width: 100px;
+  height: 100px;
+
   padding: 20px;
 
-  background-color: $gray;
+  background-color: $black;
 
-  border: 0;
+  font-family: "Courier New", monospace;
+
+  border: 2px solid $white;
+  border-radius: 50%;
 
   &:active {
     color: $black;

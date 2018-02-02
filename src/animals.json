@@ -5,12 +5,12 @@
     "options": {}
   },
   {
-    "name": "test",
+    "name": "test2",
     "agent": "flocking",
     "options": {
-      "filterQ": 1,
+      "filterQ": 0.5,
       "filterRange": 7,
-      "filterRolloff": -48,
+      "filterRolloff": -24,
       "minInitialNote": 72,
       "maxInitialNote": 96,
       "minLFOFrequency": 0.1,
