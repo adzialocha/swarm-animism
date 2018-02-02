@@ -23,7 +23,7 @@ const plugins = [
   new webpack.optimize.OccurrenceOrderPlugin(true),
   new HtmlPlugin({
     filename: 'index.html',
-    hash: true,
+    hash: false,
     inject: 'body',
     template: getPath(`./${SRC_FOLDER}/index.html`),
     minify: {
