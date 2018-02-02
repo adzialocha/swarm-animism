@@ -56,7 +56,7 @@ const isAudioSupported = window.AudioContext || window.webkitAudioContext
 const isUserMediaSupported = window.navigator.mediaDevices && window.navigator.mediaDevices.getUserMedia
 
 // Check if WebAudio API is supported on this device
-if (!isAudioSupported || !isUserMediaSupported) {
+if (isAudioSupported || !isUserMediaSupported) {
   showErrorMessage()
 } else {
   startElem.classList.add('start--visible')

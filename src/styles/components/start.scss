@@ -3,9 +3,11 @@
 
   padding: 20px;
 
-  background-color: $gray;
+  background-color: $black;
 
-  border: 0;
+  font-family: "Courier New", monospace;
+
+  border: 2px solid $white;
 
   &:active {
     color: $black;
