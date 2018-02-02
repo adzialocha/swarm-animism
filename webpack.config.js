@@ -5,6 +5,7 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const path = require('path')
 const webpack = require('webpack')
 
+const MAIN_FILES_NAME = 'swarm'
 const SERVER_PORT = 9000
 const DIST_FOLDER = 'docs'
 const SRC_FOLDER = 'src'
@@ -14,7 +15,7 @@ const isProduction = process.env.NODE_ENV === 'production'
 const getPath = filePath => path.resolve(__dirname, filePath)
 
 const extractSassPlugin = new ExtractTextPlugin({
-  filename: '[name].css',
+  filename: '[name]-[hash].css',
 })
 
 const plugins = [
@@ -41,10 +42,12 @@ if (isProduction) {
 }
 
 module.exports = {
-  entry: getPath(`./${SRC_FOLDER}/scripts/index.js`),
+  entry: {
+    [MAIN_FILES_NAME]: getPath(`./${SRC_FOLDER}/scripts/index.js`),
+  },
   output: {
     path: getPath(`./${DIST_FOLDER}`),
-    filename: '[name].js',
+    filename: '[name]-[hash].js',
   },
   module: {
     rules: [
