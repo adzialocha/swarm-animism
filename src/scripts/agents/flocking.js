@@ -154,8 +154,8 @@ export default class FlockingAgent {
     this.synth.setNote(nextFrequency)
 
     // Debug output
-    console.log('=========')
-    console.log(leftMeterValue, rightMeterValue, this.currentVelocity)
-    console.log(nextFrequency)
+    // console.log('=========')
+    // console.log(leftMeterValue, rightMeterValue, this.currentVelocity)
+    // console.log(nextFrequency)
   }
 }

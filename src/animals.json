@@ -1,6 +1,11 @@
 [
   {
     "name": "test",
+    "agent": "impulse",
+    "options": {}
+  },
+  {
+    "name": "test2",
     "agent": "flocking",
     "options": {
       "filterQ": 1,

@@ -1,4 +1,5 @@
 import test from '../../images/test.png';
+import test2 from '../../images/test2.png';
 
 const FLASH_CLASS = 'screen--flash'
 const ACTIVE_CLASS = 'screen--visible'
@@ -6,6 +7,7 @@ const BACKGROUND_ID = 'background'
 
 const animalImages = {
   test,
+  test2,
 }
 
 export default class Visuals {
