@@ -16,6 +16,10 @@ const defaultOptions = {
   maxVolume: 0.9,
 }
 
+
+import bandpassChordDetector from '../behaviours/bandpassPolyTracker'
+
+
 export default class FlockingAgent {
   constructor(options = {}, visuals, gainNode) {
     const Tone = require('tone')
@@ -99,6 +103,8 @@ export default class FlockingAgent {
     )
 
     this.gainLFO.connect(this.synthGainNode.gain)
+
+    this.bandpassChordDetector = bandpassChordDetector([60,67], gainNode)
   }
 
   start() {
@@ -122,6 +128,14 @@ export default class FlockingAgent {
   }
 
   update(signal, runtime, gainNode) {
+
+    const isChordTriggered = this.bandpassChordDetector()
+
+    if (isChordTriggered)
+      this.currentNote = randomRange(
+        this.options.minInitialNote,
+        this.options.maxInitialNote
+      )
     // Get meter and frequency values of our filter poles
     const leftMeterValue = this.meterLeft.getLevel()
     const rightMeterValue = this.meterRight.getLevel()

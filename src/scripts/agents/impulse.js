@@ -1,6 +1,7 @@
 import Meyda from 'meyda'
 import { difference, all } from 'ramda'
 
+import {midiToFrequency,frequencyToMidi} from '../utils'
 const defaultOptions = {
   delayTimeBase: 0.5,
   muteSensitivity: 0.001,
@@ -8,6 +9,9 @@ const defaultOptions = {
   rmsSensitivity: 0.05,
   triggerChromaKeys: [60, 65],
 }
+
+
+import bandpassChordDetector from '../behaviours/bandpassPolyTracker'
 
 export default class ImpulseAgent {
   constructor(options = {}, visuals, gainNode) {
@@ -19,31 +23,10 @@ export default class ImpulseAgent {
     this.converter = new Tone.Frequency()
     this.meter = new Tone.Meter()
 
-    this.filterMeters = this.options.triggerChromaKeys.map(key => {
-      const filter = new Tone.Filter({
-        frequency:this.converter.midiToFrequency(key),
-        type: 'bandpass',
-        rolloff: -48,
-        Q: 20,
-        gain: 0,
-      })
 
-      const meter = new Tone.Meter()
-
-      gainNode.connect(filter)
-      filter.connect(meter)
-
-      return meter
-    })
-
-    this.previousChordTriggered = false;
-    this.overallInputMeter = new Tone.Meter();
-
-    gainNode.connect(this.overallInputMeter);
-
-    this.delay = new Tone.Delay (
+    this.delay = new Tone.FeedbackDelay (
       this.options.delayTimeBase,
-      this.options.delayTimeBase * 100
+       0.3
     ).connect(this.meter)
 
     this.synth = new Tone.NoiseSynth({
@@ -59,6 +42,7 @@ export default class ImpulseAgent {
     }).connect(this.delay)
 
     this.meter.toMaster()
+    this.isNewChordTriggered = bandpassChordDetector(this.options.triggerChromaKeys, gainNode)
   }
 
   start() {
@@ -76,17 +60,7 @@ export default class ImpulseAgent {
     // Calculate the noiseiness of the whole signal
     const noiseiness = chroma.reduce((a, b) => a + b, 0) / chroma.length
 
-    const filterMeterValues = this.filterMeters.map(meter => meter.getLevel())
-    const overallInputLevel  = this.overallInputMeter.getLevel()
-
-    const normalizedFilterMeterValues = filterMeterValues.map(level => {
-      return level - overallInputLevel
-    })
-
-    const chordTriggered = (
-      all(level => level > -15, normalizedFilterMeterValues) &&
-      overallInputLevel > -20
-    )
+    const chordTriggered = this.isNewChordTriggered()
 
     const { delayTimeBase } = this.options
 
