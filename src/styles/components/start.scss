@@ -1,6 +1,9 @@
 .start {
   display: none;
 
+  width: 100px;
+  height: 100px;
+
   padding: 20px;
 
   background-color: $black;
@@ -8,6 +11,7 @@
   font-family: "Courier New", monospace;
 
   border: 2px solid $white;
+  border-radius: 50%;
 
   &:active {
     color: $black;

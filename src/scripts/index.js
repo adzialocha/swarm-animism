@@ -27,14 +27,23 @@ function startPerformance() {
   const audio = new Audio()
   audio.setup(visuals)
 
+  let predefinedAnimal
+
+  if (window.location.href.includes('impulse')) {
+    predefinedAnimal = animals[0]
+  } else if (window.location.href.includes('flocking')) {
+    predefinedAnimal = animals[1]
+  }
+
   // Pick a random animal
-  const animal = randomItem(animals)
+  const animal = predefinedAnimal || randomItem(animals)
   const { options } = animal
 
   // Show the animal
   visuals.setAnimal(animal.name)
 
   let agent
+  let agentName
 
   switch (animal.agent) {
     case 'impulse':
