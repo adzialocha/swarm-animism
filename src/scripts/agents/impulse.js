@@ -96,9 +96,9 @@ export default class ImpulseAgent {
     const overallInputLevel  = this.overallInputMeter.getLevel();
 
     const normalizedFilterMeterValues = filterMeterValues.map(level => level - overallInputLevel)
-    const chordTriggered = all(level => level > -10, normalizedFilterMeterValues)  && overallInputLevel >-20
+    const chordTriggered = all(level => level > -15, normalizedFilterMeterValues)  && overallInputLevel >-20
 
-    console.log(chordTriggered);
+    console.log(chordTriggered, normalizedFilterMeterValues);
    
     const synthValue = Math.abs(this.meter.getValue())
     // gainNode.mute = synthValue > MUTE_SENSITIVITY
