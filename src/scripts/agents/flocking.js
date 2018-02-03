@@ -16,7 +16,6 @@ const defaultOptions = {
   maxVolume: 0.9,
 }
 
-
 import bandpassChordDetector from '../behaviours/bandpassPolyTracker'
 
 
