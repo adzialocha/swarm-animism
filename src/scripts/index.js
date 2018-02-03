@@ -80,9 +80,9 @@ function startPerformance() {
     ]
   } else {
     agents = [
-      getAgent('impulse', audio.gain),
+      // getAgent('impulse', audio.gain),
       getAgent('flocking', audio.gain),
-      getAgent('chord', audio.gain),
+      // getAgent('chord', audio.gain),
     ]
   }
 

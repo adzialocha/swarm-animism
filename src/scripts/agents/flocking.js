@@ -109,9 +109,9 @@ export default class FlockingAgent {
 
   start() {
     // The synthesizer play all the time, trigger its note
-    // this.synth.triggerAttack(
-    //   this.converter.midiToFrequency(this.initialNote)
-    // )
+    this.synth.triggerAttack(
+      this.converter.midiToFrequency(this.initialNote)
+    )
 
     // Start the LFO
     this.gainLFO.start()
@@ -130,24 +130,24 @@ export default class FlockingAgent {
   update(signal, runtime, gainNode, [phase1Chord,phase2Chord,phase3Chord]) {
     // const isChordTriggered = this.bandpassChordDetector()
     // const isChordTriggered = phase1Chord
-    if (phase1Chord) {
-      this.currentNote = randomRange(
-        this.options.minInitialNote,
-        this.options.maxInitialNote
-      )
-      this.synthEnabled = true
-      console.log("flocking synth enabled")
-      this.synth.triggerAttack(
-        this.converter.midiToFrequency(this.currentNote)
-      )
-    }
-    if (phase2Chord) {
-      this.synthEnabled = false
-      this.synth.triggerRelease()
-      console.log("flocking synth disabled")
-    }
-    if (!this.synthEnabled)
-      return
+    // if (phase1Chord) {
+    //   this.currentNote = randomRange(
+    //     this.options.minInitialNote,
+    //     this.options.maxInitialNote
+    //   )
+    //   this.synthEnabled = true
+    //   console.log("flocking synth enabled")
+    //   this.synth.triggerAttack(
+    //     this.converter.midiToFrequency(this.currentNote)
+    //   )
+    // }
+    // if (phase2Chord) {
+    //   this.synthEnabled = false
+    //   this.synth.triggerRelease()
+    //   console.log("flocking synth disabled")
+    // }
+    // if (!this.synthEnabled)
+    //   return
 
     // Get meter and frequency values of our filter poles
     const leftMeterValue = this.meterLeft.getLevel()
