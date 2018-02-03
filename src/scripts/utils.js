@@ -9,7 +9,6 @@ function getMidiConverter() {
   return toneMidiConverter
 }
 
-
 export function randomRange(min, max) {
   return (Math.random() * (max - min)) + min
 }

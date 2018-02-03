@@ -30,7 +30,8 @@ const visuals = new Visuals(screenElem)
 
 function startPerformance() {
   // Create an audio environment
-  const audio = new Audio()
+  const useMicrophone = !isIOS()
+  const audio = new Audio(useMicrophone)
   audio.setup(visuals)
 
   // Pick a random animal
@@ -40,6 +41,8 @@ function startPerformance() {
 
   // Show the animal
   visuals.setAnimal(animal.name)
+
+  console.log(`animal=${animal.name}`)
 
   let agent
 
@@ -69,7 +72,13 @@ function showErrorMessage() {
 }
 
 // Check if WebAudio API is supported on this device
-if (!isAudioSupported() || !isUserMediaSupported()) {
+if (
+  !isAudioSupported() ||
+  (
+    !isIOS() &&
+    !isUserMediaSupported()
+  )
+) {
   showErrorMessage()
 } else {
   startElem.classList.add('start--visible')

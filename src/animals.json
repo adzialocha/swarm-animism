@@ -1,16 +1,11 @@
 [
   {
-    "name": "test",
+    "name": "chord",
     "agent": "chord",
     "options": {}
   },
   {
-    "name": "passive",
-    "agent": "sample",
-    "options": {}
-  },
-  {
-    "name": "test2",
+    "name": "flocking",
     "agent": "flocking",
     "options": {
       "filterQ": 0.5,
@@ -25,6 +20,21 @@
       "velocityRange": 1,
       "minVolume": 0.25,
       "maxVolume": 0.9
+    }
+  },
+  {
+    "name": "impulse",
+    "agent": "impulse",
+    "options": {}
+  },
+  {
+    "name": "sample",
+    "agent": "sample",
+    "options": {
+      "minVolume": 0.25,
+      "maxVolume": 0.9,
+      "minLFOFrequency": 0.1,
+      "maxLFOFrequency": 1
     }
   }
 ]

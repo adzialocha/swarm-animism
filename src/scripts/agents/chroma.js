@@ -4,8 +4,6 @@ import Meyda from 'meyda'
 import {a as aWeighting} from "a-weighting"
 import {sum} from 'ramda'
 
-console.log("R",sum);
-
 const INITIAL_NOTE = Math.random()*48+48
 const FILTER_RANGE = 7
 const VELOCITY = 0.03
@@ -18,7 +16,7 @@ export default class ChromaAgent {
     const audioContext = gainNode.context._context;
     console.log(audioContext);
     console.log(Meyda)
-    const meydaAnalyzer = Meyda.createMeydaAnalyzer({audioContext, 
+    const meydaAnalyzer = Meyda.createMeydaAnalyzer({audioContext,
       bufferSize:1024,
       source: gainNode, featureExtractors:["chroma"],callback: (features) => {
       const chromaSum = sum(features.chroma);
@@ -102,17 +100,17 @@ export default class ChromaAgent {
 
 
     // console.log(leftMeterValue, rightMeterValue, this.velocity)
- 
+
     // console.log(leftMeterValue-rightMeterValue);
 
-    
+
     this.currentNote += this.velocity
     const nextFrequency = converter.midiToFrequency(this.currentNote)
 
     // console.log('=========')
-    
-    
-   
+
+
+
     const left = converter.midiToFrequency(this.currentNote - FILTER_RANGE)
     const right = converter.midiToFrequency(this.currentNote + FILTER_RANGE)
 
