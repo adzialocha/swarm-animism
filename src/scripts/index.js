@@ -18,8 +18,7 @@ import {
 } from './utils'
 
 import animals from '../animals.json'
-
-const IOS_AGENT_NAME = 'sample'
+import iOSFallbackSample from '../files/crackles.wav'
 
 // DOM objects
 const screenElem = document.getElementById('main')
@@ -55,28 +54,29 @@ function getAgent(agentName, gainNode) {
   return agent
 }
 
+function startIOSPerformance() {
+  // Fallback for stupid iOS
+  const audioElem = document.createElement('audio')
+  screenElem.appendChild(audioElem)
+
+  audioElem.src = iOSFallbackSample
+  audioElem.loop = true
+  audioElem.play()
+}
+
 function startPerformance() {
   // Create an audio environment
-  const useMicrophone = !isIOS()
-  const audio = new Audio(useMicrophone)
+  const audio = new Audio(true)
   audio.setup(visuals)
 
   // Check if we want to force an agent
   const agentParam = getQueryVariable('agent')
-
-  // Show an image
-  const imageName = `image${Math.floor(randomRange(1, 7))}`
-  visuals.setAnimal(imageName)
 
   let agents
 
   if (agentParam) {
     agents = [
       getAgent(agentParam, audio.gain),
-    ]
-  } else if (isIOS()) {
-    agents = [
-      getAgent('sample', audio.gain),
     ]
   } else {
     agents = [
@@ -106,7 +106,16 @@ if (
   startElem.classList.add('start--visible')
 
   startElem.addEventListener('click', () => {
-    startPerformance()
+    // Show an image
+    const imageName = `image${Math.floor(randomRange(1, 7))}`
+    visuals.setAnimal(imageName)
+
+    // Start the performance
+    if (isIOS()) {
+      startIOSPerformance()
+    } else {
+      startPerformance()
+    }
 
     startElem.classList.remove('start--visible')
   })
