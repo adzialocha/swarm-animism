@@ -1,6 +1,6 @@
 const UPDATE_RATE = 20
 const HP_FREQUENCY = 300
-const LP_FREQUENCY = 8000
+const LP_FREQUENCY = 4000
 
 export default class Audio {
   setup(useMic) {
