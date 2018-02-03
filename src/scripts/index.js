@@ -3,6 +3,7 @@ import '../styles/index.scss'
 import Visuals from './visuals'
 import Audio from './audio'
 
+import ChordAgent from './agents/chord'
 import ChromaAgent from './agents/chroma'
 import FlockingAgent from './agents/flocking'
 import ImpulseAgent from './agents/impulse'
@@ -51,6 +52,9 @@ function startPerformance() {
       break
     case 'sample':
       agent = new SampleAgent(options, visuals, audio.gain)
+      break
+    case 'chord':
+      agent = new ChordAgent(options,visuals,audio.gain)
       break
     default:
       agent = new FlockingAgent(options, visuals, audio.gain)
