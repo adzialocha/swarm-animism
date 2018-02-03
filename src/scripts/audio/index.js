@@ -2,13 +2,12 @@ const UPDATE_RATE = 20
 const HP_FREQUENCY = 300
 const LP_FREQUENCY = 4000
 
-
 import bandpassChordDetector from '../behaviours/bandpassPolyTracker'
 
 const PRESET_CHORDS = {
-  "phase1": [61,63,73,85],
-  "phase2": [62,64,74,86],
-  "phase3": [63,65,75,87],
+  'phase1': [61, 63, 73, 85],
+  'phase2': [62, 64, 74, 86],
+  'phase3': [63, 65, 75, 87],
 }
 
 export default class Audio {
@@ -70,7 +69,9 @@ export default class Audio {
     })
 
     Object.keys(PRESET_CHORDS).forEach(key => {
-      this.detectors.push(bandpassChordDetector(PRESET_CHORDS[key], this.gain))
+      this.detectors.push(
+        bandpassChordDetector(PRESET_CHORDS[key], this.gain)
+      )
     })
   }
 
@@ -79,19 +80,13 @@ export default class Audio {
       const runtime = Date.now() - this.startTime
       const values = this.analyser.getValue()
 
-      const chordState = this.detectors.map(d => d())
-      console.log(chordState.join(","))
+      // Debug
+      console.log(chordState.join(','))
+
       this.agents.forEach((agent, index) => {
         if (this.mic) {
           const values = this.analyser.getValue()
-          // const isActive = agent.config.triggerChord === 0 ? true : this.detectors[index]()
-
-          // console.log(agent, isActive);
-
-          // if (isActive)
-          //   agent.enabled = true
-
-
+          const chordState = this.detectors.map(d => d())
           agent.update(values, runtime, this.gain, chordState)
         } else {
           agent.update([], runtime, null, null)
