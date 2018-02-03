@@ -6,6 +6,8 @@ export default class Audio {
   setup(useMic) {
     const Tone = require('tone')
 
+    this.agents = []
+
     // Start our runtime
     this.startTime = Date.now()
 
@@ -59,23 +61,17 @@ export default class Audio {
 
   update() {
     setTimeout(() => {
-      // if (!this.agent) {
-      //   return
-      // }
-
       const runtime = Date.now() - this.startTime
       const values = this.analyser.getValue()
 
       this.agents.forEach(agent => {
-        agent.update(values, runtime, this.gain)
+        if (this.mic) {
+          const values = this.analyser.getValue()
+          agent.update(values, runtime, this.gain)
+        } else {
+          agent.update([], runtime, null)
+        }
       })
-
-      // if (this.mic) {
-      //   const values = this.analyser.getValue()
-      //   this.agent.update(values, runtime, this.gain)
-      // } else {
-      //   this.agent.update([], runtime, null)
-      // }
 
       this.update()
     }, UPDATE_RATE)
