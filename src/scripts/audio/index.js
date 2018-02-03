@@ -81,16 +81,16 @@ export default class Audio {
       const values = this.analyser.getValue()
 
       // Debug
-      // console.log(chordState.join(','))
+      const chordState = this.detectors.map(d => d())
+      console.log(chordState.join(','))
 
       this.agents.forEach((agent, index) => {
-        if (this.mic) {
+        // if (this.mic) {
           const values = this.analyser.getValue()
-          const chordState = this.detectors.map(d => d())
           agent.update(values, runtime, this.gain, chordState)
-        } else {
-          agent.update([], runtime, null, null)
-        }
+        // } else {
+        //   agent.update([], runtime, null, null)
+        // }
       })
 
       this.update()

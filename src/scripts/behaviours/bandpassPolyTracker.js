@@ -1,7 +1,7 @@
 import {midiToFrequency,frequencyToMidi} from '../utils'
 import {all,difference} from 'ramda'
 
-const SMOOTHING = 0.94
+const SMOOTHING = 0
 
 export function getSmoothingFunctor(smoothing = 0.9, startValue = null) {
     let smoothedValue = startValue;
