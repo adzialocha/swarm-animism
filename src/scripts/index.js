@@ -10,6 +10,7 @@ import ImpulseAgent from './agents/impulse'
 import SampleAgent from './agents/sample'
 
 import {
+  getQueryVariable,
   isAudioSupported,
   isIOS,
   isUserMediaSupported,
@@ -37,7 +38,13 @@ function startPerformance() {
 
   // Pick a random animal
   const iOSAnimal = animals.find(item => item.agent === IOS_AGENT_NAME)
-  const animal = isIOS() ? iOSAnimal : randomItem(animals)
+  let animal = isIOS() ? iOSAnimal : randomItem(animals)
+  const agentParam = getQueryVariable('agent')
+
+  if (agentParam) {
+    animal = animals.find(item => item.agent === agentParam)
+  }
+
   const { options } = animal
 
   // Show the animal
