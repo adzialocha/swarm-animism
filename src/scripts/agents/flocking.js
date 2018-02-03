@@ -130,11 +130,7 @@ export default class FlockingAgent {
   update(signal, runtime, gainNode, [phase1Chord,phase2Chord,phase3Chord]) {
     // const isChordTriggered = this.bandpassChordDetector()
     // const isChordTriggered = phase1Chord
-    if (!this.synthEnabled){
-
-    // }
-
-    // if (phase1Chord) {
+    if (phase1Chord) {
       this.currentNote = randomRange(
         this.options.minInitialNote,
         this.options.maxInitialNote
