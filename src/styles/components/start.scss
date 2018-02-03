@@ -10,12 +10,16 @@
 
   font-family: "Courier New", monospace;
 
-  border: 2px solid $white;
+  color: $white;
+
+  border: 2px solid $black;
   border-radius: 50%;
 
+  cursor: pointer;
+
   &:active {
-    color: $black;
-    background-color: $white;
+    color: $white;
+    background-color: $black;
   }
 }
 
