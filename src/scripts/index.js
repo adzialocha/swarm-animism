@@ -14,6 +14,7 @@ import {
   isIOS,
   isUserMediaSupported,
   randomItem,
+  randomRange,
 } from './utils'
 
 import animals from '../animals.json'
@@ -40,9 +41,12 @@ function startPerformance() {
   const { options } = animal
 
   // Show the animal
-  visuals.setAnimal(animal.name)
+  const imageName = `image${Math.floor(randomRange(1, 7))}`
+  visuals.setAnimal(imageName)
 
-  console.log(`animal=${animal.name}`)
+  // Debug info
+  console.log(`image=${imageName}`)
+  console.log(`agent=${animal.agent}`)
 
   let agent
 

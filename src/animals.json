@@ -1,11 +1,9 @@
 [
   {
-    "name": "chord",
     "agent": "chord",
     "options": {}
   },
   {
-    "name": "flocking",
     "agent": "flocking",
     "options": {
       "filterQ": 0.5,
@@ -23,12 +21,10 @@
     }
   },
   {
-    "name": "impulse",
     "agent": "impulse",
     "options": {}
   },
   {
-    "name": "sample",
     "agent": "sample",
     "options": {
       "minVolume": 0.25,
