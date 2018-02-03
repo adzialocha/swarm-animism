@@ -28,25 +28,25 @@ export default function createBandpassNoteTracker(midiNotes,inputNode) {
         rolloff: -48,
         Q: 20,
         gain: 0,
-      }) 
-  
+      })
+
       const meter = new Tone.Meter()
-  
+
       inputNode.connect(filter)
       filter.connect(meter)
-  
+
       return meter
-    }).map(meter => { 
+    }).map(meter => {
         const smoother = getSmoothingFunctor(SMOOTHING);
         return () => smoother(meter.getLevel())
     })
     const overallInputMeter = new Tone.Meter();
     const inputMeterSmoother = getSmoothingFunctor(SMOOTHING)
     const smoothedOverallInputMeter = () => inputMeterSmoother(overallInputMeter.getLevel())
-    
+
     inputNode.connect(overallInputMeter);
     let previousChordTriggered = false;
-  
+
 
     // const smooth = (previousValue, value, smoothing = 0.9) => previousValue * smoothing + (1-smoothing) * value;
 
@@ -64,7 +64,7 @@ export default function createBandpassNoteTracker(midiNotes,inputNode) {
         all(level => level > -20, normalizedFilterMeterValues) &&
         overallInputLevel > -10
       )
-  
+
       const newChordTriggered = !previousChordTriggered && chordTriggered
       previousChordTriggered = chordTriggered
       return newChordTriggered

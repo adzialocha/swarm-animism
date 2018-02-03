@@ -130,7 +130,11 @@ export default class FlockingAgent {
   update(signal, runtime, gainNode, [phase1Chord,phase2Chord,phase3Chord]) {
     // const isChordTriggered = this.bandpassChordDetector()
     // const isChordTriggered = phase1Chord
-    if (phase1Chord) {
+    if (!this.synthEnabled){
+
+    // }
+
+    // if (phase1Chord) {
       this.currentNote = randomRange(
         this.options.minInitialNote,
         this.options.maxInitialNote
@@ -148,7 +152,7 @@ export default class FlockingAgent {
     }
     if (!this.synthEnabled)
       return
-  
+
     // Get meter and frequency values of our filter poles
     const leftMeterValue = this.meterLeft.getLevel()
     const rightMeterValue = this.meterRight.getLevel()
