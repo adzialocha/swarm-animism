@@ -5,6 +5,7 @@ import Audio from './audio'
 
 import FlockingAgent from './agents/flocking'
 import ImpulseAgent from './agents/impulse'
+import ChordAgent from './agents/chord'
 
 import { randomItem } from './utils'
 
@@ -48,6 +49,9 @@ function startPerformance() {
   switch (animal.agent) {
     case 'impulse':
       agent = new ImpulseAgent(options, visuals, audio.gain)
+      break
+    case 'chord':
+      agent = new ChordAgent(options,visuals,audio.gain)
       break
     default:
       agent = new FlockingAgent(options, visuals, audio.gain)
