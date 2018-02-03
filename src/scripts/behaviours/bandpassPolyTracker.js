@@ -54,13 +54,15 @@ export default function createBandpassNoteTracker(midiNotes,inputNode) {
     function updateFunction() {
       const filterMeterValues = filterMeters.map(meter => meter())
       const overallInputLevel  = smoothedOverallInputMeter()
+      if (overallInputLevel === null)
+        return false
       const normalizedFilterMeterValues = filterMeterValues.map(level => {
         return level - overallInputLevel
       })
     //   console.log(normalizedFilterMeterValues, overallInputLevel)
       const chordTriggered = (
-        all(level => level > -15, normalizedFilterMeterValues) &&
-        overallInputLevel > -20
+        all(level => level > -20, normalizedFilterMeterValues) &&
+        overallInputLevel > -10
       )
   
       const newChordTriggered = !previousChordTriggered && chordTriggered

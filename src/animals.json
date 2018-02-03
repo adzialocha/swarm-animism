@@ -1,10 +1,13 @@
 [
   {
     "agent": "chord",
+    "triggerChord": [60,63,67], 
     "options": {}
   },
   {
     "agent": "flocking",
+    "enableChord": "phase1",
+    "disableChord": "phase2",
     "options": {
       "filterQ": 0.5,
       "filterRange": 7,
@@ -17,15 +20,17 @@
       "maxVelocity": 0.005,
       "velocityRange": 1,
       "minVolume": 0.25,
-      "maxVolume": 0.9
+      "maxVolume": 0.5
     }
   },
   {
     "agent": "impulse",
+    "triggerChord": [],
     "options": {}
   },
   {
     "agent": "sample",
+    "triggerChord": [],
     "options": {
       "minVolume": 0.25,
       "maxVolume": 0.9,

@@ -41,14 +41,14 @@ export default class ImpulseAgent {
     }).connect(this.delay)
 
     this.meter.toMaster()
-    this.isNewChordTriggered = bandpassChordDetector(this.options.triggerChromaKeys, gainNode)
+    // this.isNewChordTriggered = bandpassChordDetector(this.options.triggerChromaKeys, gainNode)
   }
 
   start() {
     Meyda.bufferSize = 512
   }
 
-  update(signal, runtime, gainNode) {
+  update(signal, runtime, gainNode, chordsTriggered) {
     const features = Meyda.extract([
       'rms',
       'chroma',
@@ -59,13 +59,13 @@ export default class ImpulseAgent {
     // Calculate the noiseiness of the whole signal
     const noiseiness = chroma.reduce((a, b) => a + b, 0) / chroma.length
 
-    const chordTriggered = this.isNewChordTriggered()
+    // const chordTriggered = this.isNewChordTriggered()
 
     const { delayTimeBase } = this.options
 
     // Check some requirements before we really can make sound
     if (
-      chordTriggered
+      chordsTriggered.find(c => c)
       && !this.previousChordTriggered
       // && rms > this.options.rmsSensitibity
       // && noiseiness < this.options.noiseinessTreshold
@@ -81,7 +81,7 @@ export default class ImpulseAgent {
       this.synth.triggerAttackRelease(0.1)
     }
 
-    this.previousChordTriggered = chordTriggered
+    // this.previousChordTriggered = chordTriggered
 
     // Debug output
     // console.log(chordTriggered, normalizedFilterMeterValues);

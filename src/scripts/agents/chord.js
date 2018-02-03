@@ -75,6 +75,7 @@ export default class ChordAgent {
 
     this.chordDetectors = Object.keys(chords).map(chordName =>  bandpassChordDetector(chords[chordName].notes, gainNode))
     this.playingChord = null;
+    this.enabled = false
   }
 
   start() {
@@ -87,8 +88,16 @@ export default class ChordAgent {
     this.gainLFO.start()
   }
 
-  update(signal, runtime, gainNode) {
+  update(signal, runtime, gainNode, [phase1Chord,phase2Chord,phase3Chord]) {
 
+    if (phase2Chord)
+      this.enabled = true
+    if (phase3Chord)
+      this.enabled =false
+
+    if (!this.enabled)
+      return
+    
     const chordsTriggered = chords.map(({name},i) => ({name, triggered:this.chordDetectors[i]()})).filter(t => t.triggered).map(({name}) => name)
 
 

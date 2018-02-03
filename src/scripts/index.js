@@ -50,6 +50,8 @@ function getAgent(agentName, gainNode) {
       break
   }
 
+  agent.config = animal
+
   return agent
 }
 
@@ -80,6 +82,7 @@ function startPerformance() {
     agents = [
       getAgent('impulse', audio.gain),
       getAgent('flocking', audio.gain),
+      getAgent('chord', audio.gain),
     ]
   }
 

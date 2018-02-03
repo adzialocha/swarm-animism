@@ -101,15 +101,17 @@ export default class FlockingAgent {
     )
 
     this.gainLFO.connect(this.synthGainNode.gain)
+    this.synthEnabled = false
+    // this.bandpassChordDetector = bandpassChordDetector([60,67], gainNode)
 
-    this.bandpassChordDetector = bandpassChordDetector([60,67], gainNode)
+    // this.
   }
 
   start() {
     // The synthesizer play all the time, trigger its note
-    this.synth.triggerAttack(
-      this.converter.midiToFrequency(this.initialNote)
-    )
+    // this.synth.triggerAttack(
+    //   this.converter.midiToFrequency(this.initialNote)
+    // )
 
     // Start the LFO
     this.gainLFO.start()
@@ -125,14 +127,25 @@ export default class FlockingAgent {
     this.filterRight.frequency.setValueAtTime(right, '+0')
   }
 
-  update(signal, runtime, gainNode) {
-    const isChordTriggered = this.bandpassChordDetector()
-
-    if (isChordTriggered)
+  update(signal, runtime, gainNode, [phase1Chord,phase2Chord,phase3Chord]) {
+    // const isChordTriggered = this.bandpassChordDetector()
+    // const isChordTriggered = phase1Chord
+    if (phase1Chord) {
       this.currentNote = randomRange(
         this.options.minInitialNote,
         this.options.maxInitialNote
       )
+      this.synthEnabled = true
+      this.synth.triggerAttack(
+        this.converter.midiToFrequency(this.initialNote)
+      )
+    }
+    if (phase2Chord) {
+      this.synthEnabled = false
+      this.synth.triggerRelease()
+    }
+    if (!this.synthEnabled)
+      return
     // Get meter and frequency values of our filter poles
     const leftMeterValue = this.meterLeft.getLevel()
     const rightMeterValue = this.meterRight.getLevel()
