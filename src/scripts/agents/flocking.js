@@ -138,7 +138,7 @@ export default class FlockingAgent {
       this.synthEnabled = true
       console.log("flocking synth enabled")
       this.synth.triggerAttack(
-        this.converter.midiToFrequency(this.initialNote)
+        this.converter.midiToFrequency(this.currentNote)
       )
     }
     if (phase2Chord) {
