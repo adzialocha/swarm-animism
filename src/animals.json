@@ -5,6 +5,11 @@
     "options": {}
   },
   {
+    "name": "passive",
+    "agent": "sample",
+    "options": {}
+  },
+  {
     "name": "test2",
     "agent": "flocking",
     "options": {
