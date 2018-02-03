@@ -62,7 +62,8 @@ export default class ImpulseAgent {
     // const chordTriggered = this.isNewChordTriggered()
 
     const { delayTimeBase } = this.options
-
+    if (chordsTriggered.find(c => c))
+      console.log("impulse agent triggered")
     // Check some requirements before we really can make sound
     if (
       chordsTriggered.find(c => c)

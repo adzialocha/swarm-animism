@@ -90,11 +90,14 @@ export default class ChordAgent {
 
   update(signal, runtime, gainNode, [phase1Chord,phase2Chord,phase3Chord]) {
 
-    if (phase2Chord)
+    if (phase2Chord) {
       this.enabled = true
-    if (phase3Chord)
+      console.log("chord agent enabled")
+    }
+    if (phase3Chord) {
       this.enabled =false
-
+      console.log("chord agent disabled")
+    }
     if (!this.enabled)
       return
     

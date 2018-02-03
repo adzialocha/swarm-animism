@@ -136,6 +136,7 @@ export default class FlockingAgent {
         this.options.maxInitialNote
       )
       this.synthEnabled = true
+      console.log("flocking synth enabled")
       this.synth.triggerAttack(
         this.converter.midiToFrequency(this.initialNote)
       )
@@ -143,9 +144,11 @@ export default class FlockingAgent {
     if (phase2Chord) {
       this.synthEnabled = false
       this.synth.triggerRelease()
+      console.log("flocking synth disabled")
     }
     if (!this.synthEnabled)
       return
+  
     // Get meter and frequency values of our filter poles
     const leftMeterValue = this.meterLeft.getLevel()
     const rightMeterValue = this.meterRight.getLevel()
