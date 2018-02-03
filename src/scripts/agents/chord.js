@@ -1,30 +1,23 @@
-import { a as aWeighting } from 'a-weighting'
-import { randomRange } from '../utils'
-import { midiToFrequency, frequencyToMidi } from '../utils'
+import {
+  midiToFrequency,
+  randomRange,
+} from '../utils'
+
+import bandpassChordDetector from '../behaviours/bandpassPolyTracker'
+
+const CHORDS = [
+  { name: 'C', notes: [60, 64, 67], next: 'G' },
+  { name: 'G', notes: [67, 71, 74], next: 'Am' },
+  { name: 'Am', notes: [69, 72, 76], next: 'F' },
+  { name: 'F', notes: [65, 69, 72], next: 'C' },
+]
 
 const defaultOptions = {
-  filterQ: 1,
-  filterRange: 7,
-  filterRolloff: -48,
-  minInitialNote: 48,
-  maxInitialNote: 96,
   minLFOFrequency: 0.1,
   maxLFOFrequency: 0.5,
-  minVelocity: 0.001,
-  maxVelocity: 0.005,
-  velocityRange: 1,
   minVolume: 0.25,
   maxVolume: 0.9,
 }
-
-const chords = [
-  {name:'C', notes:[60, 64, 67],next:'G'},
-  {name:'G', notes:[67,71,74],next:'Am'},
-  {name:'Am', notes:[69,72, 76],next:'F'},
-  {name:'F', notes:[65,69,72],next:'C'}
-]
-
-import bandpassChordDetector from '../behaviours/bandpassPolyTracker'
 
 export default class ChordAgent {
   constructor(options = {}, visuals, gainNode) {
@@ -35,7 +28,7 @@ export default class ChordAgent {
     this.options = Object.assign({}, defaultOptions, options)
 
     // Synthesized sound of our agent (output)
-    this.synth =  new Tone.PolySynth(3, Tone.Synth);
+    this.synth =  new Tone.PolySynth(3, Tone.Synth)
 
     this.synth.set({
       oscillator: {
@@ -54,11 +47,6 @@ export default class ChordAgent {
 
     this.synth.connect(this.synthGainNode)
 
-
-
-    // Set the filter poles to initial positions
-    // this.setFilterPoles(this.initialNote)
-
     // LFO for controlling the synth gain
     const lfoFrequency = randomRange(
       this.options.minLFOFrequency,
@@ -73,43 +61,41 @@ export default class ChordAgent {
 
     this.gainLFO.connect(this.synthGainNode.gain)
 
-    this.chordDetectors = Object.keys(chords).map(chordName =>  bandpassChordDetector(chords[chordName].notes, gainNode))
-    this.playingChord = null;
+    this.chordDetectors = Object.keys(CHORDS).map(chordName =>  {
+      return bandpassChordDetector(CHORDS[chordName].notes, gainNode)
+    })
+
+    this.playingChord = null
   }
 
   start() {
-    // The synthesizer play all the time, trigger its note
-    // this.synth.triggerAttack(
-    //   this.converter.midiToFrequency(this.initialNote)
-    // )
-
     // Start the LFO
     this.gainLFO.start()
   }
 
   update(signal, runtime, gainNode) {
+    const chordsTriggered = CHORDS
+      .map(({ name }, i) => {
+        return ({
+          name,
+          triggered: this.chordDetectors[i](),
+        })
+      })
+      .filter(t => t.triggered)
+      .map(({ name }) => name)
 
-    const chordsTriggered = chords.map(({name},i) => ({name, triggered:this.chordDetectors[i]()})).filter(t => t.triggered).map(({name}) => name)
+    // console.log('chordsTriggered', chordsTriggered)
 
-
-    // console.log("chordsTriggered",chordsTriggered);
     if (chordsTriggered.length > 0) {
       const triggeredChordName = chordsTriggered[0]
-      console.log(triggeredChordName)
+      const nextChord = CHORDS.find(({ name }) => name === triggeredChordName).next
+      const notes = CHORDS.find(({ name }) => name === nextChord).notes
 
-      const nextChord = chords.find(({name}) => name === triggeredChordName).next;
-      console.log("next",nextChord)
-      const notes = chords.find(({name}) => name === nextChord).notes;
-      console.log(notes)
-      this.synth.triggerAttackRelease(notes.map(midiToFrequency), "1n", "+1n");
-      // chordsTriggered => chords.find(({name}) => name === chordName).next)
+      this.synth.triggerAttackRelease(notes.map(midiToFrequency), '1n', '+1n')
+
+      // console.log(triggeredChordName)
+      // console.log('next', nextChord)
+      // console.log(notes)
     }
-    //
-    // this.synth.setNote(nextFrequency)
-
-    // Debug output
-    // console.log('=========')
-    // console.log(leftMeterValue, rightMeterValue, this.currentVelocity)
-    // console.log(nextFrequency)
   }
 }

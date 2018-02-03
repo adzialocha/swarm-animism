@@ -1,7 +1,12 @@
 [
   {
     "agent": "chord",
-    "options": {}
+    "options": {
+      "minLFOFrequency": 0.1,
+      "maxLFOFrequency": 0.5,
+      "minVolume": 0.25,
+      "maxVolume": 0.9
+    }
   },
   {
     "agent": "flocking",
@@ -22,7 +27,13 @@
   },
   {
     "agent": "impulse",
-    "options": {}
+    "options": {
+      "delayTimeBase": 0.5,
+      "muteSensitivity": 0.001,
+      "noiseinessTreshold": 0.12,
+      "rmsSensitivity": 0.05,
+      "triggerChromaKeys": [60, 65]
+    }
   },
   {
     "agent": "sample",

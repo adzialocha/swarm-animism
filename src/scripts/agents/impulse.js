@@ -1,5 +1,4 @@
 import Meyda from 'meyda'
-import { difference, all } from 'ramda'
 
 import { midiToFrequency, frequencyToMidi } from '../utils'
 
@@ -84,6 +83,6 @@ export default class ImpulseAgent {
     this.previousChordTriggered = chordTriggered
 
     // Debug output
-    // console.log(chordTriggered, normalizedFilterMeterValues);
+    // console.log(chordTriggered, normalizedFilterMeterValues)
   }
 }

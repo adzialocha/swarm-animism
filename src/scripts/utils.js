@@ -1,4 +1,4 @@
-let toneMidiConverter = null;
+let toneMidiConverter = null
 
 function getMidiConverter() {
   if (!toneMidiConverter) {

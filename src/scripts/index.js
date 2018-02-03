@@ -4,7 +4,6 @@ import Visuals from './visuals'
 import Audio from './audio'
 
 import ChordAgent from './agents/chord'
-import ChromaAgent from './agents/chroma'
 import FlockingAgent from './agents/flocking'
 import ImpulseAgent from './agents/impulse'
 import SampleAgent from './agents/sample'
@@ -34,6 +33,7 @@ function startPerformance() {
   // Create an audio environment
   const useMicrophone = !isIOS()
   const audio = new Audio(useMicrophone)
+
   audio.setup(visuals)
 
   // Pick a random animal
@@ -52,17 +52,14 @@ function startPerformance() {
   visuals.setAnimal(imageName)
 
   // Debug info
-  console.log(`image=${imageName}`)
-  console.log(`agent=${animal.agent}`)
+  // console.log(`image=${imageName}`)
+  // console.log(`agent=${animal.agent}`)
 
   let agent
 
   switch (animal.agent) {
     case 'impulse':
       agent = new ImpulseAgent(options, visuals, audio.gain)
-      break
-    case 'chroma':
-      agent = new ChromaAgent(options, visuals, audio.gain)
       break
     case 'sample':
       agent = new SampleAgent(options, visuals, audio.gain)
