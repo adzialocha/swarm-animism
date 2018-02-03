@@ -1,7 +1,5 @@
 import '../styles/index.scss'
 
-import sample from '../files/crackles.wav'
-
 import Visuals from './visuals'
 import Audio from './audio'
 
@@ -20,8 +18,7 @@ import {
 } from './utils'
 
 import animals from '../animals.json'
-
-const IOS_AGENT_NAME = 'sample'
+import iOSFallbackSample from '../files/crackles.wav'
 
 // DOM objects
 const screenElem = document.getElementById('main')
@@ -57,10 +54,12 @@ function getAgent(agentName, gainNode) {
 
 function startIOSPerformance() {
   // Fallback for stupid iOS
-  const elem = document.createElement('audio')
-  document.getElementById('main').appendChild(elem)
-  elem.src = sample
-  elem.play()
+  const audioElem = document.createElement('audio')
+  screenElem.appendChild(audioElem)
+
+  audioElem.src = iOSFallbackSample
+  audioElem.loop = true
+  audioElem.play()
 }
 
 function startPerformance() {
