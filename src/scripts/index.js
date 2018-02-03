@@ -4,7 +4,6 @@ import Visuals from './visuals'
 import Audio from './audio'
 
 import ChordAgent from './agents/chord'
-import ChromaAgent from './agents/chroma'
 import FlockingAgent from './agents/flocking'
 import ImpulseAgent from './agents/impulse'
 import SampleAgent from './agents/sample'
@@ -30,52 +29,61 @@ const startElem = document.getElementById('start')
 // Basic interfaces
 const visuals = new Visuals(screenElem)
 
+function getAgent(agentName, gainNode) {
+  let agent
+
+  const animal = animals.find(item => item.agent === agentName)
+  const { options } = animal
+
+  switch (agentName) {
+    case 'impulse':
+      agent = new ImpulseAgent(options, visuals, gainNode)
+      break
+    case 'sample':
+      agent = new SampleAgent(options, visuals, gainNode)
+      break
+    case 'chord':
+      agent = new ChordAgent(options,visuals, gainNode)
+      break
+    default:
+      agent = new FlockingAgent(options, visuals, gainNode)
+      break
+  }
+
+  return agent
+}
+
 function startPerformance() {
   // Create an audio environment
   const useMicrophone = !isIOS()
   const audio = new Audio(useMicrophone)
   audio.setup(visuals)
 
-  // Pick a random animal
-  const iOSAnimal = animals.find(item => item.agent === IOS_AGENT_NAME)
-  let animal = isIOS() ? iOSAnimal : randomItem(animals)
+  // Check if we want to force an agent
   const agentParam = getQueryVariable('agent')
 
-  if (agentParam) {
-    animal = animals.find(item => item.agent === agentParam)
-  }
-
-  const { options } = animal
-
-  // Show the animal
+  // Show an image
   const imageName = `image${Math.floor(randomRange(1, 7))}`
   visuals.setAnimal(imageName)
 
-  // Debug info
-  console.log(`image=${imageName}`)
-  console.log(`agent=${animal.agent}`)
+  let agents
 
-  let agent
-
-  switch (animal.agent) {
-    case 'impulse':
-      agent = new ImpulseAgent(options, visuals, audio.gain)
-      break
-    case 'chroma':
-      agent = new ChromaAgent(options, visuals, audio.gain)
-      break
-    case 'sample':
-      agent = new SampleAgent(options, visuals, audio.gain)
-      break
-    case 'chord':
-      agent = new ChordAgent(options,visuals,audio.gain)
-      break
-    default:
-      agent = new FlockingAgent(options, visuals, audio.gain)
-      break
+  if (agentParam) {
+    agents = [
+      getAgent(agentParam, audio.gain),
+    ]
+  } else if (isIOS()) {
+    agents = [
+      getAgent('sample', audio.gain),
+    ]
+  } else {
+    agents = [
+      getAgent('impulse', audio.gain),
+      getAgent('flocking', audio.gain),
+    ]
   }
 
-  audio.setAgent(agent)
+  audio.setAgents(agents)
 }
 
 function showErrorMessage() {

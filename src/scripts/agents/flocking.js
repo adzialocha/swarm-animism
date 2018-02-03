@@ -1,6 +1,8 @@
 import { a as aWeighting } from 'a-weighting'
 import { randomRange } from '../utils'
 
+import bandpassChordDetector from '../behaviours/bandpassPolyTracker'
+
 const defaultOptions = {
   filterQ: 1,
   filterRange: 7,
@@ -15,10 +17,6 @@ const defaultOptions = {
   minVolume: 0.25,
   maxVolume: 0.9,
 }
-
-
-import bandpassChordDetector from '../behaviours/bandpassPolyTracker'
-
 
 export default class FlockingAgent {
   constructor(options = {}, visuals, gainNode) {
@@ -128,7 +126,6 @@ export default class FlockingAgent {
   }
 
   update(signal, runtime, gainNode) {
-
     const isChordTriggered = this.bandpassChordDetector()
 
     if (isChordTriggered)
