@@ -1,6 +1,7 @@
 import { a as aWeighting } from 'a-weighting'
 import { randomRange } from '../utils'
-import {midiToFrequency,frequencyToMidi} from '../utils'
+import { midiToFrequency, frequencyToMidi } from '../utils'
+
 const defaultOptions = {
   filterQ: 1,
   filterRange: 7,
@@ -16,7 +17,6 @@ const defaultOptions = {
   maxVolume: 0.9,
 }
 
-
 const chords = [
   {name:'C', notes:[60, 64, 67],next:'G'},
   {name:'G', notes:[67,71,74],next:'Am'},
@@ -24,9 +24,7 @@ const chords = [
   {name:'F', notes:[65,69,72],next:'C'}
 ]
 
-
 import bandpassChordDetector from '../behaviours/bandpassPolyTracker'
-
 
 export default class ChordAgent {
   constructor(options = {}, visuals, gainNode) {
@@ -106,7 +104,7 @@ export default class ChordAgent {
       this.synth.triggerAttackRelease(notes.map(midiToFrequency), "1n", "+1n");
       // chordsTriggered => chords.find(({name}) => name === chordName).next)
     }
-    // 
+    //
     // this.synth.setNote(nextFrequency)
 
     // Debug output

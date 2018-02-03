@@ -3,52 +3,62 @@ import '../styles/index.scss'
 import Visuals from './visuals'
 import Audio from './audio'
 
+import ChordAgent from './agents/chord'
+import ChromaAgent from './agents/chroma'
 import FlockingAgent from './agents/flocking'
 import ImpulseAgent from './agents/impulse'
-import ChordAgent from './agents/chord'
+import SampleAgent from './agents/sample'
 
-import { randomItem } from './utils'
+import {
+  isAudioSupported,
+  isIOS,
+  isUserMediaSupported,
+  randomItem,
+  randomRange,
+} from './utils'
 
 import animals from '../animals.json'
 
-const SCREEN_ID = 'main'
-const ERROR_ID = 'error'
-const START_ID = 'start'
+const IOS_AGENT_NAME = 'sample'
 
 // DOM objects
-const screenElem = document.getElementById(SCREEN_ID)
-const errorElem = document.getElementById(ERROR_ID)
-const startElem = document.getElementById(START_ID)
+const screenElem = document.getElementById('main')
+const errorElem = document.getElementById('error')
+const startElem = document.getElementById('start')
 
 // Basic interfaces
 const visuals = new Visuals(screenElem)
 
 function startPerformance() {
   // Create an audio environment
-  const audio = new Audio()
+  const useMicrophone = !isIOS()
+  const audio = new Audio(useMicrophone)
   audio.setup(visuals)
 
-  let predefinedAnimal
-
-  if (window.location.href.includes('impulse')) {
-    predefinedAnimal = animals[0]
-  } else if (window.location.href.includes('flocking')) {
-    predefinedAnimal = animals[1]
-  }
-
   // Pick a random animal
-  const animal = predefinedAnimal || randomItem(animals)
+  const iOSAnimal = animals.find(item => item.agent === IOS_AGENT_NAME)
+  const animal = isIOS() ? iOSAnimal : randomItem(animals)
   const { options } = animal
 
   // Show the animal
-  visuals.setAnimal(animal.name)
+  const imageName = `image${Math.floor(randomRange(1, 7))}`
+  visuals.setAnimal(imageName)
+
+  // Debug info
+  console.log(`image=${imageName}`)
+  console.log(`agent=${animal.agent}`)
 
   let agent
-  let agentName
 
   switch (animal.agent) {
     case 'impulse':
       agent = new ImpulseAgent(options, visuals, audio.gain)
+      break
+    case 'chroma':
+      agent = new ChromaAgent(options, visuals, audio.gain)
+      break
+    case 'sample':
+      agent = new SampleAgent(options, visuals, audio.gain)
       break
     case 'chord':
       agent = new ChordAgent(options,visuals,audio.gain)
@@ -65,11 +75,14 @@ function showErrorMessage() {
   errorElem.classList.add('error--visible')
 }
 
-const isAudioSupported = window.AudioContext || window.webkitAudioContext
-const isUserMediaSupported = window.navigator.mediaDevices && window.navigator.mediaDevices.getUserMedia
-
 // Check if WebAudio API is supported on this device
-if (!isAudioSupported || !isUserMediaSupported) {
+if (
+  !isAudioSupported() ||
+  (
+    !isIOS() &&
+    !isUserMediaSupported()
+  )
+) {
   showErrorMessage()
 } else {
   startElem.classList.add('start--visible')

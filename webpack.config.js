@@ -73,6 +73,10 @@ module.exports = {
         ],
       },
       {
+        test: /\.wav$/i,
+        use: 'file-loader',
+      },
+      {
         test: /\.scss$/,
         use: extractSassPlugin.extract({
           use: [{

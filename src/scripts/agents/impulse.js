@@ -1,7 +1,8 @@
 import Meyda from 'meyda'
 import { difference, all } from 'ramda'
 
-import {midiToFrequency,frequencyToMidi} from '../utils'
+import { midiToFrequency, frequencyToMidi } from '../utils'
+
 const defaultOptions = {
   delayTimeBase: 0.5,
   muteSensitivity: 0.001,
@@ -9,7 +10,6 @@ const defaultOptions = {
   rmsSensitivity: 0.05,
   triggerChromaKeys: [60, 65],
 }
-
 
 import bandpassChordDetector from '../behaviours/bandpassPolyTracker'
 
@@ -22,7 +22,6 @@ export default class ImpulseAgent {
     this.visuals = visuals
     this.converter = new Tone.Frequency()
     this.meter = new Tone.Meter()
-
 
     this.delay = new Tone.FeedbackDelay (
       this.options.delayTimeBase,

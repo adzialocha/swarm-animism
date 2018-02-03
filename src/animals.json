@@ -1,11 +1,9 @@
 [
   {
-    "name": "test",
-    "agent": "impulse",
+    "agent": "chord",
     "options": {}
   },
   {
-    "name": "test2",
     "agent": "flocking",
     "options": {
       "filterQ": 0.5,
@@ -20,6 +18,19 @@
       "velocityRange": 1,
       "minVolume": 0.25,
       "maxVolume": 0.9
+    }
+  },
+  {
+    "agent": "impulse",
+    "options": {}
+  },
+  {
+    "agent": "sample",
+    "options": {
+      "minVolume": 0.25,
+      "maxVolume": 0.9,
+      "minLFOFrequency": 0.1,
+      "maxLFOFrequency": 1
     }
   }
 ]
