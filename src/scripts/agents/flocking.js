@@ -15,7 +15,7 @@ const defaultOptions = {
   maxVelocity: 0.005,
   velocityRange: 1,
   minVolume: 0.25,
-  maxVolume: 0.9,
+  maxVolume: 0.5,
   triggerChord: [60, 67],
 }
 

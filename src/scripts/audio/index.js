@@ -1,4 +1,4 @@
-const UPDATE_RATE = 100
+const UPDATE_RATE = 20
 const HP_FREQUENCY = 300
 const LP_FREQUENCY = 4000
 
@@ -7,20 +7,6 @@ export default class Audio {
     const Tone = require('tone')
 
     this.agents = []
-
-    this.synth = new Tone.Synth({
-      oscillator: {
-        type: 'sine',
-      },
-      envelope: {
-        attack: 0.005,
-        decay: 0.1,
-        sustain: 1,
-        release: 1,
-      },
-    }).toMaster()
-
-    this.synth.triggerAttack(1000)
 
     // Start our runtime
     this.startTime = Date.now()
