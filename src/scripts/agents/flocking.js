@@ -92,6 +92,8 @@ export default class FlockingAgent {
     //   this.options.triggerChord,
     //   gainNode
     // )
+
+    this.interval = null
   }
 
   newRandomNote() {
@@ -122,6 +124,13 @@ export default class FlockingAgent {
 
     // Start the LFO
     this.gainLFO.start()
+
+    // Change screen color
+    this.interval = setInterval(() => {
+      this.visuals.setToColor([
+        0, 0, 105 + (Math.round(nextFrequency) % 150)
+      ])
+    }, 1000)
   }
 
   stop() {
@@ -132,6 +141,8 @@ export default class FlockingAgent {
 
     // Remove overlay
     this.visuals.resetColor()
+
+    clearInterval(this.interval)
   }
 
   setFilterPoles(centerNote) {
@@ -181,9 +192,6 @@ export default class FlockingAgent {
     // Change the synth note
     const nextFrequency = this.converter.midiToFrequency(this.currentNote)
     this.synth.setNote(nextFrequency)
-
-    // Change screen color
-    this.visuals.setToColor([0, 0, 105 + (Math.round(nextFrequency) % 150)])
 
     // Debug output
     debug('=========')
