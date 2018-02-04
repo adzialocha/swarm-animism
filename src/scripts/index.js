@@ -196,7 +196,7 @@ function init() {
     visuals.setAnimal(imageName)
 
     // Start the performance
-    if (isIOS()) {
+    if (isIOS() && !hasControl) {
       startIOSPerformance()
     } else {
       startPerformance()
