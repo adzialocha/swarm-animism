@@ -6,6 +6,8 @@ const defaultOptions = {
   triggerChord: [60, 65],
 }
 
+import {getSmoothingFunctor} from '../behaviours/bandpassPolyTracker'
+
 export default class ImpulseAgent {
   constructor(options = {}, visuals, gainNode) {
     const Tone = require('tone')
@@ -59,6 +61,7 @@ export default class ImpulseAgent {
     // constchordTriggered = this.isNewChordTriggered()
 
     //console.log(this.meter.getLevel())
+
     const chordTriggered = (this.meter.getLevel() > -10)
 
     // Check some requirements before we really can make sound
