@@ -3,7 +3,7 @@ const HP_FREQUENCY = 300
 const LP_FREQUENCY = 4000
 
 export default class Audio {
-  setup() {
+  setup(useMic) {
     const Tone = require('tone')
 
     this.agents = []
@@ -11,34 +11,37 @@ export default class Audio {
     // Start our runtime
     this.startTime = Date.now()
 
-    // Create audio nodes
-    this.mic = new Tone.UserMedia()
     // this.analyser = new Tone.Waveform(256)
     this.gain = new Tone.Volume()
 
-    // Make the frequency band a little bit more narrow
-    const highpass = new Tone.Filter({
-      frequency: HP_FREQUENCY,
-      type: 'highpass',
-      rolloff: -12,
-      Q: 0.5,
-    })
+    // Create audio nodes
+    if (useMic) {
+      this.mic = new Tone.UserMedia()
 
-    const lowpass = new Tone.Filter({
-      frequency: LP_FREQUENCY,
-      type: 'lowpass',
-      rolloff: -12,
-      Q: 0.5,
-    })
+      // Make the frequency band a little bit more narrow
+      const highpass = new Tone.Filter({
+        frequency: HP_FREQUENCY,
+        type: 'highpass',
+        rolloff: -12,
+        Q: 0.5,
+      })
 
-    // Use gain to control volume of microphone
-    this.mic.connect(highpass)
-    highpass.connect(lowpass)
-    lowpass.connect(this.gain)
-    // this.gain.connect(this.analyser)
+      const lowpass = new Tone.Filter({
+        frequency: LP_FREQUENCY,
+        type: 'lowpass',
+        rolloff: -12,
+        Q: 0.5,
+      })
 
-    // Listen ...
-    this.mic.open()
+      // Use gain to control volume of microphone
+      this.mic.connect(highpass)
+      highpass.connect(lowpass)
+      lowpass.connect(this.gain)
+      // this.gain.connect(this.analyser)
+
+      // Listen ...
+      this.mic.open()
+    }
 
     // Start a frequent check by calling the agents update function
     this.update()
