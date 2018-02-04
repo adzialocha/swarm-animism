@@ -20,10 +20,10 @@ export default class ImpulseAgent {
     this.converter = new Tone.Frequency()
     this.meter = new Tone.Meter()
 
-    // this.delay = new Tone.FeedbackDelay (
-    //   this.options.delayTimeBase,
-    //    0.3
-    // ).connect(this.meter)
+    this.delay = new Tone.Delay (
+      this.options.delayTimeBase,
+       10*this.options.delayTimeBase
+    ).connect(this.meter)
 
     this.synth = new Tone.NoiseSynth({
       noise: {
@@ -38,7 +38,7 @@ export default class ImpulseAgent {
     }).toMaster()
 
     this.gainNode = gainNode
-    this.gainNode.connect(this.meter)
+    this.gainNode.connect(this.delay)
 
     // this.isNewChordTriggered = bandpassChordDetector(
     //   this.options.triggerChord,
@@ -46,7 +46,7 @@ export default class ImpulseAgent {
     // )
     this.previousChordTriggered = true
     const smoother = getSmoothingFunctor();
-    this.smoothedMeter = () => smoother(Math.exp(this.meter.getLevel()))
+    this.smoothedMeter = () => smoother(Math.abs(this.meter.getValue()))*100
     this.lastMeterValue = this.smoothedMeter()
   }
 
@@ -69,9 +69,9 @@ export default class ImpulseAgent {
     const meterValue = this.smoothedMeter()
     const meterRise = meterValue - this.lastMeterValue
     const rawMeter = this.meter.getLevel();
-    debug("impulse meter", rawMeter)
+    // debug("impulse meter", rawMeter)
     debug("impulse meter rise (smoothed)", meterRise)
-    const chordTriggered = (rawMeter > -10)
+    const chordTriggered = (meterRise > 1)
 
     this.lastMeterValue = meterValue
     // Check some requirements before we really can make sound
@@ -82,10 +82,10 @@ export default class ImpulseAgent {
     ) {
       this.visuals.flash()
 
-      // this.delay.delayTime.setValueAtTime(
-      //   delayTimeBase * Math.ceil(Math.random() * 8) * delayTimeBase,
-      //   '+0'
-      // )
+      this.delay.delayTime.setValueAtTime(
+        this.options.delayTimeBase * Math.ceil(Math.random() * 8),
+        '+0'
+      )
 
       this.synth.triggerAttackRelease(0.1)
     }

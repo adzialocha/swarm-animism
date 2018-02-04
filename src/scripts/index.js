@@ -157,8 +157,8 @@ function startIOSPerformance() {
 
 function startPerformance() {
   // Create an audio environment
-  audio = new Audio(!hasControl)
-  audio.setup()
+  audio = new Audio()
+  audio.setup(!hasControl)
 
   agentCollection = {
     impulse: new ImpulseAgent({}, visuals, audio.gain),
