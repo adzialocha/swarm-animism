@@ -8,6 +8,8 @@ const defaultOptions = {
 
 import {getSmoothingFunctor} from '../behaviours/bandpassPolyTracker'
 
+import {debug} from '../utils'
+
 export default class ImpulseAgent {
   constructor(options = {}, visuals, gainNode) {
     const Tone = require('tone')
@@ -43,6 +45,9 @@ export default class ImpulseAgent {
     //   gainNode
     // )
     this.previousChordTriggered = true
+    const smoother = getSmoothingFunctor();
+    this.smoothedMeter = () => smoother(Math.exp(this.meter.getLevel()))
+    this.lastMeterValue = this.smoothedMeter()
   }
 
   start() {
@@ -61,9 +66,14 @@ export default class ImpulseAgent {
     // constchordTriggered = this.isNewChordTriggered()
 
     //console.log(this.meter.getLevel())
+    const meterValue = this.smoothedMeter()
+    const meterRise = meterValue - this.lastMeterValue
+    const rawMeter = this.meter.getLevel();
+    debug("impulse meter", rawMeter)
+    debug("impulse meter rise (smoothed)", meterRise)
+    const chordTriggered = (rawMeter > -10)
 
-    const chordTriggered = (this.meter.getLevel() > -10)
-
+    this.lastMeterValue = meterValue
     // Check some requirements before we really can make sound
     if (
       chordTriggered
