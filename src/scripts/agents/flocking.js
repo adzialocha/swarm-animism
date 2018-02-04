@@ -1,8 +1,6 @@
-import Tone from 'tone'
-
 import { a as aWeighting } from 'a-weighting'
 
-import { randomRange } from '../utils'
+import { randomRange, debug } from '../utils'
 import bandpassChordDetector from '../behaviours/bandpassPolyTracker'
 
 const defaultOptions = {
@@ -17,12 +15,14 @@ const defaultOptions = {
   maxVelocity: 0.005,
   velocityRange: 1,
   minVolume: 0.25,
-  maxVolume: 0.3,
+  maxVolume: 0.9,
   triggerChord: [60, 67],
 }
 
 export default class FlockingAgent {
   constructor(options = {}, visuals, gainNode) {
+    const Tone = require('tone')
+
     this.converter = new Tone.Frequency()
     this.visuals = visuals
     this.options = Object.assign({}, defaultOptions, options)
@@ -186,8 +186,8 @@ export default class FlockingAgent {
     this.visuals.setToColor([0, 0, 105 + (Math.round(nextFrequency) % 150)])
 
     // Debug output
-    // console.log('=========')
-    // console.log(leftMeterValue, rightMeterValue, this.currentVelocity)
-    // console.log(nextFrequency)
+    debug('=========')
+    debug(leftMeterValue, rightMeterValue, this.currentVelocity)
+    debug(nextFrequency)
   }
 }

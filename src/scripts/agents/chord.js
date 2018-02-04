@@ -1,5 +1,3 @@
-import Tone from 'tone'
-
 import {
   midiToFrequency,
   randomRange,
@@ -23,6 +21,8 @@ const defaultOptions = {
 
 export default class ChordAgent {
   constructor(options = {}, visuals, gainNode) {
+    const Tone = require('tone')
+
     this.converter = new Tone.Frequency()
     this.visuals = visuals
     this.options = Object.assign({}, defaultOptions, options)

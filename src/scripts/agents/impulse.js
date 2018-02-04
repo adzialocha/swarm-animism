@@ -1,5 +1,3 @@
-import Tone from 'tone'
-
 import Meyda from 'meyda'
 
 import bandpassChordDetector from '../behaviours/bandpassPolyTracker'
@@ -14,6 +12,8 @@ const defaultOptions = {
 
 export default class ImpulseAgent {
   constructor(options = {}, visuals, gainNode) {
+    const Tone = require('tone')
+
     this.options = Object.assign({}, defaultOptions, options)
 
     this.visuals = visuals

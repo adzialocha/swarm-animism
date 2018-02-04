@@ -1,5 +1,3 @@
-import Tone from 'tone'
-
 import { all } from 'ramda'
 
 import { midiToFrequency } from '../utils'
@@ -25,6 +23,8 @@ export function getSmoothingFunctor(smoothing = 0.9, startValue = null) {
 }
 
 export default function createBandpassNoteTracker(midiNotes, inputNode) {
+  const Tone = require('tone')
+
   const filterMeters = midiNotes.map(key => {
     const filter = new Tone.Filter({
       frequency: midiToFrequency(key),

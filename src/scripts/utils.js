@@ -1,8 +1,8 @@
-import Tone from 'tone'
-
 let toneMidiConverter = null
 
 function getMidiConverter() {
+  const Tone = require('tone')
+
   if (!toneMidiConverter) {
     toneMidiConverter = new Tone.Frequency()
   }
@@ -51,4 +51,10 @@ export function getQueryVariable(variable) {
   }
 
   return null
+}
+
+export function debug(...args) {
+  if (getQueryVariable('debug')) {
+    console.log(...args)
+  }
 }
