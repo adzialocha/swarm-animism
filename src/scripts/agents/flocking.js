@@ -1,3 +1,5 @@
+import Tone from 'tone'
+
 import { a as aWeighting } from 'a-weighting'
 
 import { randomRange } from '../utils'
@@ -21,8 +23,6 @@ const defaultOptions = {
 
 export default class FlockingAgent {
   constructor(options = {}, visuals, gainNode) {
-    const Tone = require('tone')
-
     this.converter = new Tone.Frequency()
     this.visuals = visuals
     this.options = Object.assign({}, defaultOptions, options)

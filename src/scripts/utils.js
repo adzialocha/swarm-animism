@@ -1,8 +1,9 @@
+import Tone from 'tone'
+
 let toneMidiConverter = null
 
 function getMidiConverter() {
   if (!toneMidiConverter) {
-    const Tone = require('tone')
     toneMidiConverter = new Tone.Frequency()
   }
 

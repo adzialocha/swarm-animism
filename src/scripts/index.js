@@ -1,4 +1,5 @@
 import '../styles/index.scss'
+import iOSFallbackSample from '../files/crackles.wav'
 
 import * as firebase from 'firebase/app'
 import 'firebase/database'

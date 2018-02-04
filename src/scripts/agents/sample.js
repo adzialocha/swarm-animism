@@ -1,3 +1,5 @@
+import Tone from 'tone'
+
 import sample from '../../files/crackles.wav'
 
 import { randomRange } from '../utils'
@@ -11,8 +13,6 @@ const defaultOptions = {
 
 export default class SampleAgent {
   constructor(options = {}, visuals, gainNode) {
-    const Tone = require('tone')
-
     this.options = Object.assign({}, defaultOptions, options)
 
     this.visuals = visuals
