@@ -1,4 +1,4 @@
-const UPDATE_RATE = 20
+const UPDATE_RATE = 50
 const HP_FREQUENCY = 300
 const LP_FREQUENCY = 4000
 

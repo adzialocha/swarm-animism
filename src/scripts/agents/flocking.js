@@ -1,7 +1,7 @@
 import { a as aWeighting } from 'a-weighting'
 
 import { randomRange, debug } from '../utils'
-import bandpassChordDetector from '../behaviours/bandpassPolyTracker'
+// import bandpassChordDetector from '../behaviours/bandpassPolyTracker'
 
 const defaultOptions = {
   filterQ: 0.75,
@@ -88,10 +88,10 @@ export default class FlockingAgent {
 
     this.gainLFO.connect(this.synthGainNode.gain)
 
-    this.bandpassChordDetector = bandpassChordDetector(
-      this.options.triggerChord,
-      gainNode
-    )
+    // this.bandpassChordDetector = bandpassChordDetector(
+    //   this.options.triggerChord,
+    //   gainNode
+    // )
   }
 
   newRandomNote() {
@@ -146,10 +146,10 @@ export default class FlockingAgent {
 
   update() {
     // Generate random frequency when chord was detected
-    if (this.bandpassChordDetector()) {
-      this.newRandomNote()
-      this.visuals.flash()
-    }
+    // if (this.bandpassChordDetector()) {
+    //   this.newRandomNote()
+    //   this.visuals.flash()
+    // }
 
     // Get meter and frequency values of our filter poles
     const leftMeterValue = this.meterLeft.getLevel()
@@ -183,7 +183,7 @@ export default class FlockingAgent {
     this.synth.setNote(nextFrequency)
 
     // Change screen color
-    this.visuals.setToColor([0, 0, 105 + (Math.round(nextFrequency) % 150)])
+    // this.visuals.setToColor([0, 0, 105 + (Math.round(nextFrequency) % 150)])
 
     // Debug output
     debug('=========')
