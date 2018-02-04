@@ -22,7 +22,6 @@
   "dependencies": {
     "a-weighting": "^1.1.0",
     "firebase": "^4.9.1",
-    "meyda": "^4.1.3",
     "normalize.css": "^7.0.0",
     "ramda": "^0.25.0",
     "tone": "^0.11.11"

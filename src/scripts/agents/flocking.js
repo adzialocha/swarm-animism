@@ -189,6 +189,5 @@ export default class FlockingAgent {
     debug('=========')
     debug(leftMeterValue, rightMeterValue, this.currentVelocity)
     debug(nextFrequency)
-    debug(this.synthGainNode.volume.param)
   }
 }
