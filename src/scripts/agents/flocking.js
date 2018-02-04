@@ -183,7 +183,7 @@ export default class FlockingAgent {
     this.synth.setNote(nextFrequency)
 
     // Change screen color
-    // this.visuals.setToColor([0, 0, 105 + (Math.round(nextFrequency) % 150)])
+    this.visuals.setToColor([0, 0, 105 + (Math.round(nextFrequency) % 150)])
 
     // Debug output
     debug('=========')
