@@ -49,7 +49,7 @@ export default class SampleAgent {
     // unused
   }
 
-  update(signal, runtime, gainNode) {
+  update(signal) {
     // unused
   }
 }

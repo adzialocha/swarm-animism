@@ -125,15 +125,16 @@ export default class FlockingAgent {
     this.filterRight.frequency.setValueAtTime(right, '+0')
   }
 
-  update(signal, runtime, gainNode) {
-
+  update(signal) {
     const isChordTriggered = this.bandpassChordDetector()
 
-    if (isChordTriggered)
+    if (isChordTriggered) {
       this.currentNote = randomRange(
         this.options.minInitialNote,
         this.options.maxInitialNote
       )
+    }
+
     // Get meter and frequency values of our filter poles
     const leftMeterValue = this.meterLeft.getLevel()
     const rightMeterValue = this.meterRight.getLevel()

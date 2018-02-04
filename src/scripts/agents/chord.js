@@ -73,7 +73,7 @@ export default class ChordAgent {
     this.gainLFO.start()
   }
 
-  update(signal, runtime, gainNode) {
+  update(signal) {
     const chordsTriggered = CHORDS
       .map(({ name }, i) => {
         return ({

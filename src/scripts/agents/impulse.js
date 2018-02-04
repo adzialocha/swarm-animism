@@ -47,7 +47,7 @@ export default class ImpulseAgent {
     Meyda.bufferSize = 512
   }
 
-  update(signal, runtime, gainNode) {
+  update(signal) {
     const features = Meyda.extract([
       'rms',
       'chroma',

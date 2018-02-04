@@ -64,10 +64,11 @@ export default class Audio {
         return
       }
 
-      const runtime = Date.now() - this.startTime
       const values = this.analyser.getValue()
 
-      this.agent.update(values, runtime, this.gain)
+      this.agents.forEach((agent, index) => {
+        agent.update(values)
+      })
 
       this.update()
     }, UPDATE_RATE)
