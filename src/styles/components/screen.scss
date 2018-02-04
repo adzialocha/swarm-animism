@@ -8,7 +8,7 @@
 
   transition: background 200ms ease-out;
 
-  opacity: .5;
+  opacity: .7;
 }
 
 .screen--visible {
@@ -18,5 +18,5 @@
 .screen--flash {
   background-color: $black;
 
-  transition: background 10ms ease-out;
+  transition: background 100ms ease-in-out;
 }

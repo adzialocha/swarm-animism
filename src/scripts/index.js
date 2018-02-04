@@ -18,46 +18,53 @@ import {
   randomRange,
 } from './utils'
 
-import animals from '../animals.json'
 import firebaseSettings from '../firebase.json'
 
+let dbAgentNames = []
+let agentCollection = {}
+
 // DOM objects
-const screenElem = document.getElementById('main')
+const controlElem = document.getElementById('control')
+const controlButtonElems = document.getElementsByClassName('control__button')
 const errorElem = document.getElementById('error')
+const screenElem = document.getElementById('main')
 const startElem = document.getElementById('start')
 
 // Check if we want to force an agent
 const forcedAgentParam = getQueryVariable('agent')
+const hasControl = getQueryVariable('control')
 
 // Basic interfaces
 const visuals = new Visuals(screenElem)
 let audio
 
-function getAgent(agentName, gainNode) {
-  let agent
+function setControlButton(agentName, status, disabled = undefined) {
+  for (let i = 0; i < controlButtonElems.length; i += 1) {
+    const button = controlButtonElems[i]
 
-  const animal = animals.find(item => item.agent === agentName)
-  const { options } = animal
-
-  switch (agentName) {
-    case 'impulse':
-      agent = new ImpulseAgent(options, visuals, audio.gain)
-      break
-    case 'sample':
-      agent = new SampleAgent(options, visuals, audio.gain)
-      break
-    case 'chord':
-      agent = new ChordAgent(options, visuals, audio.gain)
-      break
-    default:
-      agent = new FlockingAgent(options, visuals, audio.gain)
-      break
+    if (agentName == button.dataset.agent) {
+      if (status) {
+        button.classList.add('control__button--active')
+      } else {
+        button.classList.remove('control__button--active')
+      }
+    } else if (typeof disabled !== 'undefined') {
+      button.disabled = disabled
+    }
   }
+}
 
-  // Pass over config object to every agent
-  agent.config = animal
+function getAgent(agentName) {
+  let agent = agentCollection[agentName]
+  agent.name = agentName
 
   return agent
+}
+
+function getAgents(agentNames) {
+  return agentNames.map(agentName => {
+    return getAgent(agentName)
+  })
 }
 
 function initFirebase() {
@@ -66,22 +73,70 @@ function initFirebase() {
   const database = firebase.database()
 
   // Listen to changes of the agent state
-  const agentNameState = database.ref('state/agentName')
+  const agentNameState = database.ref('state/agentNames')
+
+  setControlButton(null, null, true)
 
   agentNameState.on('value', snapshot => {
     if (!audio) {
       return
     }
 
-    const value = snapshot.val()
-    const agentNames = (typeof value === 'string') ? [value] : value
+    setControlButton(null, null, false)
 
-    const agents = agentNames.map(agentName => {
-      return getAgent(agentName)
-    })
+    // Update value
+    dbAgentNames = snapshot.val() || []
 
-    audio.setAgents(agents)
+    const existingAgentNames = audio.agents ? audio.agents.map(agent => {
+      return agent.name
+    }) : []
+
+    // Add these new agents
+    const newAgents = dbAgentNames.reduce((acc, newAgentName) => {
+      if (!existingAgentNames.includes(newAgentName)) {
+        acc.push(newAgentName)
+        setControlButton(newAgentName, true)
+      }
+      return acc
+    }, [])
+
+    // Remove these agents
+    const removeAgents = existingAgentNames.reduce((acc, agentName) => {
+      if (!dbAgentNames.includes(agentName)) {
+        acc.push(agentName)
+        setControlButton(agentName, false)
+      }
+      return acc
+    }, [])
+
+    audio.removeAgents(getAgents(removeAgents))
+    audio.addAgents(getAgents(newAgents))
   })
+}
+
+function initControl() {
+  const database = firebase.database()
+  const ref = database.ref('state/agentNames')
+
+  controlElem.classList.add('control--visible')
+
+  for (let i = 0; i < controlButtonElems.length; i += 1) {
+    const button = controlButtonElems[i]
+
+    button.addEventListener('click', event => {
+      event.preventDefault()
+      const { agent } = button.dataset
+
+      if (dbAgentNames.includes(agent)) {
+        dbAgentNames.splice(dbAgentNames.findIndex(i => i === agent), 1)
+      } else {
+        dbAgentNames.push(agent)
+      }
+
+      setControlButton(null, null, true)
+      ref.set(dbAgentNames)
+    })
+  }
 }
 
 function startIOSPerformance() {
@@ -95,18 +150,29 @@ function startIOSPerformance() {
 }
 
 function startPerformance() {
-  // Initialise remote control via Firebase
-  if (!forcedAgentParam) {
-    initFirebase()
-  }
-
   // Create an audio environment
   audio = new Audio()
   audio.setup()
 
+  agentCollection = {
+    impulse: new ImpulseAgent({}, visuals, audio.gain),
+    chord: new ChordAgent({}, visuals, audio.gain),
+    flocking: new FlockingAgent({}, visuals, audio.gain),
+  }
+
+  // Initialise remote control via Firebase
+  if (!forcedAgentParam) {
+    initFirebase()
+
+    // Show control when requested
+    if (hasControl) {
+      initControl()
+    }
+  }
+
   // Set agent when forced
   if (forcedAgentParam) {
-    audio.setAgents([getAgent(forcedAgentParam)])
+    audio.addAgents([getAgent(forcedAgentParam)])
   }
 }
 

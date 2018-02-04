@@ -1,0 +1,33 @@
+.control {
+  position: absolute;
+
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+
+  display: none;
+
+  height: 100%;
+  width: 100%;
+}
+
+.control--visible {
+  display: flex;
+}
+
+.control__button {
+  margin: 20px;
+
+  width: 150px;
+  height: 150px;
+
+  color: $white;
+
+  background-color: $black;
+}
+
+.control__button--active {
+  color: $black;
+
+  background-color: $white;
+}

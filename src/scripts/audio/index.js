@@ -50,16 +50,34 @@ export default class Audio {
     this.mic.close()
   }
 
-  setAgents(agents) {
-    this.agents = agents
-
-    this.agents.forEach(agent => {
-      agent.start()
+  addAgents(addedAgents) {
+    addedAgents.forEach(newAgent => {
+      this.agents.push(newAgent)
+      newAgent.start()
     })
+  }
+
+  removeAgents(removedAgents) {
+    const agentNames = removedAgents.map(agent => agent.name)
+
+    this.agents = this.agents.reduce((acc, existingAgent) => {
+      if (agentNames.includes(existingAgent.name)) {
+        existingAgent.stop()
+      } else {
+        acc.push(existingAgent)
+      }
+
+      return acc
+    }, [])
   }
 
   update() {
     setTimeout(() => {
+      if (!this.agents) {
+        this.update()
+        return
+      }
+
       const values = this.analyser.getValue()
 
       this.agents.forEach(agent => {

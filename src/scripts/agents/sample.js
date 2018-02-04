@@ -49,6 +49,10 @@ export default class SampleAgent {
     // unused
   }
 
+  stop() {
+    this.synth.triggerRelease(60)
+  }
+
   update(signal) {
     // unused
   }

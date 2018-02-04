@@ -1,16 +1,14 @@
 import Meyda from 'meyda'
 
-import { midiToFrequency, frequencyToMidi } from '../utils'
+import bandpassChordDetector from '../behaviours/bandpassPolyTracker'
 
 const defaultOptions = {
   delayTimeBase: 0.5,
   muteSensitivity: 0.001,
   noiseinessTreshold: 0.12,
-  rmsSensitivity: 0.05,
-  triggerChromaKeys: [60, 65],
+  rmsSensitibity: 0.05,
+  triggerChord: [60, 65],
 }
-
-import bandpassChordDetector from '../behaviours/bandpassPolyTracker'
 
 export default class ImpulseAgent {
   constructor(options = {}, visuals, gainNode) {
@@ -40,11 +38,19 @@ export default class ImpulseAgent {
     }).connect(this.delay)
 
     this.meter.toMaster()
-    this.isNewChordTriggered = bandpassChordDetector(this.options.triggerChromaKeys, gainNode)
+
+    this.isNewChordTriggered = bandpassChordDetector(
+      this.options.triggerChord,
+      gainNode
+    )
   }
 
   start() {
     Meyda.bufferSize = 512
+  }
+
+  stop() {
+    // unused
   }
 
   update(signal) {
@@ -55,20 +61,24 @@ export default class ImpulseAgent {
 
     const { chroma, rms } = features
 
+    const {
+      delayTimeBase,
+      noiseinessTreshold,
+      rmsSensitibity,
+    } = this.options
+
     // Calculate the noiseiness of the whole signal
     const noiseiness = chroma.reduce((a, b) => a + b, 0) / chroma.length
 
+    // Check if chord was triggered
     const chordTriggered = this.isNewChordTriggered()
-
-    const { delayTimeBase } = this.options
 
     // Check some requirements before we really can make sound
     if (
       chordTriggered
       && !this.previousChordTriggered
-      // && rms > this.options.rmsSensitibity
-      // && noiseiness < this.options.noiseinessTreshold
-      // && isChromaTriggered
+      // && noiseiness < noiseinessTreshold
+      // && rms > rmsSensitibity
     ) {
       this.visuals.flash()
 
@@ -81,8 +91,5 @@ export default class ImpulseAgent {
     }
 
     this.previousChordTriggered = chordTriggered
-
-    // Debug output
-    // console.log(chordTriggered, normalizedFilterMeterValues)
   }
 }

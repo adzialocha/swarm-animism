@@ -4,18 +4,19 @@ import { randomRange } from '../utils'
 import bandpassChordDetector from '../behaviours/bandpassPolyTracker'
 
 const defaultOptions = {
-  filterQ: 1,
+  filterQ: 0.75,
   filterRange: 7,
-  filterRolloff: -48,
-  minInitialNote: 48,
-  maxInitialNote: 96,
+  filterRolloff: -24,
+  minInitialNote: 60,
+  maxInitialNote: 82,
   minLFOFrequency: 0.1,
-  maxLFOFrequency: 0.5,
+  maxLFOFrequency: 0.75,
   minVelocity: 0.001,
   maxVelocity: 0.005,
   velocityRange: 1,
   minVolume: 0.25,
-  maxVolume: 0.9,
+  maxVolume: 0.3,
+  triggerChord: [60, 67],
 }
 
 export default class FlockingAgent {
@@ -23,6 +24,8 @@ export default class FlockingAgent {
     const Tone = require('tone')
 
     this.converter = new Tone.Frequency()
+
+    this.visuals = visuals
 
     this.options = Object.assign({}, defaultOptions, options)
 
@@ -102,7 +105,10 @@ export default class FlockingAgent {
 
     this.gainLFO.connect(this.synthGainNode.gain)
 
-    this.bandpassChordDetector = bandpassChordDetector([60,67], gainNode)
+    this.bandpassChordDetector = bandpassChordDetector(
+      this.options.triggerChord,
+      gainNode
+    )
   }
 
   start() {
@@ -113,6 +119,13 @@ export default class FlockingAgent {
 
     // Start the LFO
     this.gainLFO.start()
+  }
+
+  stop() {
+    this.synth.triggerRelease()
+
+    // Stop the LFO
+    this.gainLFO.stop()
   }
 
   setFilterPoles(centerNote) {
@@ -126,9 +139,8 @@ export default class FlockingAgent {
   }
 
   update(signal) {
-    const isChordTriggered = this.bandpassChordDetector()
-
-    if (isChordTriggered) {
+    // Generate random frequency when chord was detected
+    if (this.bandpassChordDetector()) {
       this.currentNote = randomRange(
         this.options.minInitialNote,
         this.options.maxInitialNote
@@ -165,6 +177,9 @@ export default class FlockingAgent {
     // Change the synth note
     const nextFrequency = this.converter.midiToFrequency(this.currentNote)
     this.synth.setNote(nextFrequency)
+
+    // Change screen color
+    this.visuals.setToColor([0, 0, nextFrequency % 255])
 
     // Debug output
     // console.log('=========')

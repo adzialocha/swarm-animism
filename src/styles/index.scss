@@ -8,11 +8,14 @@
 
 // base
 
+@import "base/button";
+@import "base/global";
 @import "base/layout";
 @import "base/typo";
 
 // components
 
+@import "components/control";
 @import "components/error";
 @import "components/screen";
 @import "components/start";

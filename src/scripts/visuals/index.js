@@ -25,8 +25,8 @@ export default class Visuals {
     this.timeout = null
   }
 
-  setToColor(color) {
-    this.elem.style.backgroundColor = 'rgba(' + color.join(',') + ', 1)'
+  setToColor(color, alpha = 1) {
+    this.elem.style.backgroundColor = 'rgba(' + color.concat(alpha).join(',') + ')'
   }
 
   setAnimal(animalName) {
@@ -34,7 +34,7 @@ export default class Visuals {
     this.backgroundElem.style.backgroundImage = `url(${animalImages[animalName]})`
   }
 
-  flash(duration = 100) {
+  flash(duration = 200) {
     if (this.timeout) {
       clearTimeout(this.timeout)
     }

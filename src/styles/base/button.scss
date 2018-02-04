@@ -1,0 +1,23 @@
+button {
+  padding: 20px;
+
+  background-color: $white;
+
+  color: $black;
+
+  font-family: "Courier New", monospace;
+
+  border: 2px solid $black;
+  border-radius: 50%;
+
+  outline: 0;
+
+  &:active {
+    color: $white;
+    background-color: $black;
+  }
+
+  &[disabled] {
+    background-color: $gray;
+  }
+}

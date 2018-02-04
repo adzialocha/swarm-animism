@@ -28,7 +28,7 @@ export default class ChordAgent {
     this.options = Object.assign({}, defaultOptions, options)
 
     // Synthesized sound of our agent (output)
-    this.synth =  new Tone.PolySynth(3, Tone.Synth)
+    this.synth = new Tone.PolySynth(3, Tone.Synth)
 
     this.synth.set({
       oscillator: {
@@ -71,6 +71,10 @@ export default class ChordAgent {
   start() {
     // Start the LFO
     this.gainLFO.start()
+  }
+
+  stop() {
+    // unused
   }
 
   update(signal) {
