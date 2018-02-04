@@ -162,8 +162,8 @@ function startPerformance() {
   audio.setup()
 
   agentCollection = {
-    impulse: new ImpulseAgent({}, visuals, audio.gain),
-    chord: new ChordAgent({}, visuals, audio.gain),
+    // impulse: new ImpulseAgent({}, visuals, audio.gain),
+    // chord: new ChordAgent({}, visuals, audio.gain),
     flocking: new FlockingAgent({}, visuals, audio.gain),
   }
 
