@@ -25,8 +25,12 @@ export default class Visuals {
     this.timeout = null
   }
 
-  setToColor(color, alpha = 1) {
-    this.elem.style.backgroundColor = 'rgba(' + color.concat(alpha).join(',') + ')'
+  setToColor(color) {
+    this.elem.style.backgroundColor = 'rgb(' + color.join(',') + ')'
+  }
+
+  resetColor() {
+    this.elem.style.backgroundColor = null
   }
 
   setAnimal(animalName) {

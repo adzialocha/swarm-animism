@@ -72,6 +72,12 @@ function initFirebase() {
   const app = firebase.initializeApp(firebaseSettings)
   const database = firebase.database()
 
+  // Add client to list
+  database.ref('clients').push({
+    timestamp: Date.now(),
+    userAgent: window.navigator.userAgent,
+  })
+
   // Listen to changes of the agent state
   const agentNameState = database.ref('state/agentNames')
 

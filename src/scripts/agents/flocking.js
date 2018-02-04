@@ -24,9 +24,7 @@ export default class FlockingAgent {
     const Tone = require('tone')
 
     this.converter = new Tone.Frequency()
-
     this.visuals = visuals
-
     this.options = Object.assign({}, defaultOptions, options)
 
     // Synthesized sound of our agent (output)
@@ -46,21 +44,6 @@ export default class FlockingAgent {
     this.synthGainNode.toMaster()
 
     this.synth.connect(this.synthGainNode)
-
-    // Choose some random parameters
-    this.velocity = randomRange(
-      this.options.minVelocity,
-      this.options.maxVelocity
-    )
-
-    this.initialNote = randomRange(
-      this.options.minInitialNote,
-      this.options.maxInitialNote
-    )
-
-    // Agent states
-    this.currentNote = this.initialNote
-    this.currentVelocity = this.velocity
 
     // Filters to analyse the signal at two poles around the center
     this.filterLeft = new Tone.Filter({
@@ -88,8 +71,8 @@ export default class FlockingAgent {
     this.filterLeft.connect(this.meterLeft)
     this.filterRight.connect(this.meterRight)
 
-    // Set the filter poles to initial positions
-    this.setFilterPoles(this.initialNote)
+    // Choose some random parameters
+    this.newRandomNote()
 
     // LFO for controlling the synth gain
     const lfoFrequency = randomRange(
@@ -111,7 +94,27 @@ export default class FlockingAgent {
     )
   }
 
+  newRandomNote() {
+    this.velocity = randomRange(
+      this.options.minVelocity,
+      this.options.maxVelocity
+    )
+
+    this.initialNote = randomRange(
+      this.options.minInitialNote,
+      this.options.maxInitialNote
+    )
+
+    this.currentNote = this.initialNote
+    this.currentVelocity = this.velocity
+
+    // Set the filter poles to initial positions
+    this.setFilterPoles(this.initialNote)
+  }
+
   start() {
+    this.newRandomNote()
+
     // The synthesizer play all the time, trigger its note
     this.synth.triggerAttack(
       this.converter.midiToFrequency(this.initialNote)
@@ -126,6 +129,9 @@ export default class FlockingAgent {
 
     // Stop the LFO
     this.gainLFO.stop()
+
+    // Remove overlay
+    this.visuals.resetColor()
   }
 
   setFilterPoles(centerNote) {
@@ -141,10 +147,8 @@ export default class FlockingAgent {
   update(signal) {
     // Generate random frequency when chord was detected
     if (this.bandpassChordDetector()) {
-      this.currentNote = randomRange(
-        this.options.minInitialNote,
-        this.options.maxInitialNote
-      )
+      this.newRandomNote()
+      this.visuals.flash()
     }
 
     // Get meter and frequency values of our filter poles
@@ -179,7 +183,7 @@ export default class FlockingAgent {
     this.synth.setNote(nextFrequency)
 
     // Change screen color
-    this.visuals.setToColor([0, 0, nextFrequency % 255])
+    this.visuals.setToColor([0, 0, 105 + (Math.round(nextFrequency) % 150)])
 
     // Debug output
     // console.log('=========')

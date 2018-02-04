@@ -12,6 +12,8 @@ button {
 
   outline: 0;
 
+  cursor: pointer;
+
   &:active {
     color: $white;
     background-color: $black;

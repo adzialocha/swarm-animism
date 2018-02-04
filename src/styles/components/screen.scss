@@ -7,8 +7,9 @@
   width: 100%;
 
   transition: background 200ms ease-out;
+  -webkit-transition: background 200ms ease-out;
 
-  opacity: .7;
+  opacity: .5;
 }
 
 .screen--visible {
@@ -16,7 +17,10 @@
 }
 
 .screen--flash {
+  opacity: 1;
+
   background-color: $black;
 
   transition: background 100ms ease-in-out;
+  -webkit-transition: background 100ms ease-out;
 }

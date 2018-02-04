@@ -24,7 +24,7 @@ export default class ChordAgent {
     const Tone = require('tone')
 
     this.converter = new Tone.Frequency()
-
+    this.visuals = visuals
     this.options = Object.assign({}, defaultOptions, options)
 
     // Synthesized sound of our agent (output)
@@ -96,6 +96,8 @@ export default class ChordAgent {
       const notes = CHORDS.find(({ name }) => name === nextChord).notes
 
       this.synth.triggerAttackRelease(notes.map(midiToFrequency), '1n', '+1n')
+
+      this.visuals.flash()
 
       // console.log(triggeredChordName)
       // console.log('next', nextChord)
