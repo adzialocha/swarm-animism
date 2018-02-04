@@ -157,13 +157,15 @@ function startIOSPerformance() {
 
 function startPerformance() {
   // Create an audio environment
-  audio = new Audio()
-  audio.setup()
+  if (!hasControl) {
+    audio = new Audio()
+    audio.setup()
 
-  agentCollection = {
-    impulse: new ImpulseAgent({}, visuals, audio.gain),
-    // chord: new ChordAgent({}, visuals, audio.gain),
-    flocking: new FlockingAgent({}, visuals, audio.gain),
+    agentCollection = {
+      impulse: new ImpulseAgent({}, visuals, audio.gain),
+      // chord: new ChordAgent({}, visuals, audio.gain),
+      flocking: new FlockingAgent({}, visuals, audio.gain),
+    }
   }
 
   // Initialise remote control via Firebase

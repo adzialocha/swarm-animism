@@ -59,7 +59,7 @@ export default class ImpulseAgent {
     // constchordTriggered = this.isNewChordTriggered()
 
     //console.log(this.meter.getLevel())
-    const chordTriggered = (this.meter.getLevel() > -10);
+    const chordTriggered = (this.meter.getLevel() > -10)
 
     // Check some requirements before we really can make sound
     if (
