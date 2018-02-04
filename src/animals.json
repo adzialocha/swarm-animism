@@ -34,14 +34,5 @@
       "rmsSensitivity": 0.05,
       "triggerChromaKeys": [60, 65]
     }
-  },
-  {
-    "agent": "sample",
-    "options": {
-      "minVolume": 0.25,
-      "maxVolume": 0.9,
-      "minLFOFrequency": 0.1,
-      "maxLFOFrequency": 1
-    }
   }
 ]
