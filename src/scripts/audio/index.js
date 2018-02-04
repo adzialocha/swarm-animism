@@ -60,13 +60,9 @@ export default class Audio {
 
   update() {
     setTimeout(() => {
-      if (!this.agent) {
-        return
-      }
-
       const values = this.analyser.getValue()
 
-      this.agents.forEach((agent, index) => {
+      this.agents.forEach(agent => {
         agent.update(values)
       })
 

@@ -66,7 +66,8 @@ function initFirebase() {
   const database = firebase.database()
 
   // Listen to changes of the agent state
-  var agentNameState = database.ref('state/agentName')
+  const agentNameState = database.ref('state/agentName')
+
   agentNameState.on('value', snapshot => {
     if (!audio) {
       return
@@ -94,6 +95,11 @@ function startIOSPerformance() {
 }
 
 function startPerformance() {
+  // Initialise remote control via Firebase
+  if (!forcedAgentParam) {
+    initFirebase()
+  }
+
   // Create an audio environment
   audio = new Audio()
   audio.setup()
@@ -109,11 +115,6 @@ function showErrorMessage() {
 }
 
 function init() {
-  // Initialise remote control via Firebase
-  if (!forcedAgentParam) {
-    initFirebase()
-  }
-
   // Wait for user to click so we can kick off the WebAudio context
   startElem.classList.add('start--visible')
 
