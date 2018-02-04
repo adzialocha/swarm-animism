@@ -71,7 +71,7 @@ export default class ImpulseAgent {
     const rawMeter = this.meter.getLevel();
     // debug("impulse meter", rawMeter)
     debug("impulse meter rise (smoothed)", meterRise)
-    const chordTriggered = (meterRise > 2.5)
+    const chordTriggered = (meterRise > 0.3)
 
     this.lastMeterValue = meterValue
     // Check some requirements before we really can make sound
