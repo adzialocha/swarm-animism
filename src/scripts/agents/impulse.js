@@ -1,4 +1,4 @@
-import bandpassChordDetector from '../behaviours/bandpassPolyTracker'
+// import bandpassChordDetector from '../behaviours/bandpassPolyTracker'
 
 const defaultOptions = {
   delayTimeBase: 0.5,
@@ -16,10 +16,10 @@ export default class ImpulseAgent {
     this.converter = new Tone.Frequency()
     this.meter = new Tone.Meter()
 
-    this.delay = new Tone.FeedbackDelay (
-      this.options.delayTimeBase,
-       0.3
-    ).connect(this.meter)
+    // this.delay = new Tone.FeedbackDelay (
+    //   this.options.delayTimeBase,
+    //    0.3
+    // ).connect(this.meter)
 
     this.synth = new Tone.NoiseSynth({
       noise: {
@@ -31,14 +31,16 @@ export default class ImpulseAgent {
         sustain: 1,
         release: 0.7,
       },
-    }).connect(this.delay)
+    }).toMaster()
 
-    this.meter.toMaster()
+    this.gainNode = gainNode
+    this.gainNode.connect(this.meter)
 
-    this.isNewChordTriggered = bandpassChordDetector(
-      this.options.triggerChord,
-      gainNode
-    )
+    // this.isNewChordTriggered = bandpassChordDetector(
+    //   this.options.triggerChord,
+    //   gainNode
+    // )
+    this.previousChordTriggered = true
   }
 
   start() {
@@ -49,24 +51,28 @@ export default class ImpulseAgent {
   }
 
   update() {
-    const {
-      delayTimeBase,
-    } = this.options
+    // const {
+    //   delayTimeBase,
+    // } = this.options
 
     // Check if chord was triggered
-    const chordTriggered = this.isNewChordTriggered()
+    // constchordTriggered = this.isNewChordTriggered()
+
+    //console.log(this.meter.getLevel())
+    const chordTriggered = (this.meter.getLevel() > -10);
 
     // Check some requirements before we really can make sound
     if (
       chordTriggered
       && !this.previousChordTriggered
+      // chordTriggered
     ) {
       this.visuals.flash()
 
-      this.delay.delayTime.setValueAtTime(
-        delayTimeBase * Math.ceil(Math.random() * 8) * delayTimeBase,
-        '+0'
-      )
+      // this.delay.delayTime.setValueAtTime(
+      //   delayTimeBase * Math.ceil(Math.random() * 8) * delayTimeBase,
+      //   '+0'
+      // )
 
       this.synth.triggerAttackRelease(0.1)
     }
