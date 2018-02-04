@@ -127,6 +127,7 @@ export default class FlockingAgent {
 
     // Change screen color
     this.interval = setInterval(() => {
+      const nextFrequency = this.converter.midiToFrequency(this.currentNote)
       this.visuals.setToColor([
         0, 0, 105 + (Math.round(nextFrequency) % 150)
       ])
