@@ -77,7 +77,7 @@ export default class ChordAgent {
     // unused
   }
 
-  update(signal) {
+  update() {
     const chordsTriggered = CHORDS
       .map(({ name }, i) => {
         return ({

@@ -48,7 +48,7 @@ export default class ImpulseAgent {
     // unused
   }
 
-  update(signal) {
+  update() {
     const {
       delayTimeBase,
     } = this.options

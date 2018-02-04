@@ -78,10 +78,10 @@ export default class Audio {
         return
       }
 
-      const values = this.analyser.getValue()
+      // const values = this.analyser.getValue()
 
       this.agents.forEach(agent => {
-        agent.update(values)
+        agent.update()
       })
 
       this.update()

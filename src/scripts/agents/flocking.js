@@ -144,7 +144,7 @@ export default class FlockingAgent {
     this.filterRight.frequency.setValueAtTime(right, '+0')
   }
 
-  update(signal) {
+  update() {
     // Generate random frequency when chord was detected
     if (this.bandpassChordDetector()) {
       this.newRandomNote()
