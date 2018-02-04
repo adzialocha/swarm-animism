@@ -1,6 +1,6 @@
-const UPDATE_RATE = 20
+const UPDATE_RATE = 100
 const HP_FREQUENCY = 300
-const LP_FREQUENCY = 4000
+const LP_FREQUENCY = 8000
 
 export default class Audio {
   setup() {
@@ -13,7 +13,7 @@ export default class Audio {
 
     // Create audio nodes
     this.mic = new Tone.UserMedia()
-    this.analyser = new Tone.Waveform(512)
+    // this.analyser = new Tone.Waveform(256)
     this.gain = new Tone.Volume()
 
     // Make the frequency band a little bit more narrow
@@ -35,7 +35,7 @@ export default class Audio {
     this.mic.connect(highpass)
     highpass.connect(lowpass)
     lowpass.connect(this.gain)
-    this.gain.connect(this.analyser)
+    // this.gain.connect(this.analyser)
 
     // Listen ...
     this.mic.open()

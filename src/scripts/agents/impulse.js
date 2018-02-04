@@ -1,12 +1,8 @@
-import Meyda from 'meyda'
-
 import bandpassChordDetector from '../behaviours/bandpassPolyTracker'
 
 const defaultOptions = {
   delayTimeBase: 0.5,
   muteSensitivity: 0.001,
-  noiseinessTreshold: 0.12,
-  rmsSensitibity: 0.05,
   triggerChord: [60, 65],
 }
 
@@ -46,7 +42,6 @@ export default class ImpulseAgent {
   }
 
   start() {
-    Meyda.bufferSize = 512
   }
 
   stop() {
@@ -54,21 +49,9 @@ export default class ImpulseAgent {
   }
 
   update(signal) {
-    const features = Meyda.extract([
-      'rms',
-      'chroma',
-    ], signal)
-
-    const { chroma, rms } = features
-
     const {
       delayTimeBase,
-      noiseinessTreshold,
-      rmsSensitibity,
     } = this.options
-
-    // Calculate the noiseiness of the whole signal
-    const noiseiness = chroma.reduce((a, b) => a + b, 0) / chroma.length
 
     // Check if chord was triggered
     const chordTriggered = this.isNewChordTriggered()
@@ -77,8 +60,6 @@ export default class ImpulseAgent {
     if (
       chordTriggered
       && !this.previousChordTriggered
-      // && noiseiness < noiseinessTreshold
-      // && rms > rmsSensitibity
     ) {
       this.visuals.flash()
 

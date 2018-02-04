@@ -80,14 +80,13 @@ export default class FlockingAgent {
       this.options.maxLFOFrequency
     )
 
-    // this.gainLFO = new Tone.LFO(
-    //   lfoFrequency,
-    //   this.options.minVolume,
-    //   this.options.maxVolume
-    // )
+    this.gainLFO = new Tone.LFO(
+      lfoFrequency,
+      this.options.minVolume,
+      this.options.maxVolume
+    )
 
-    // this.gainLFO.connect(this.synthGainNode.gain)
-
+    this.gainLFO.connect(this.synthGainNode.gain)
 
     this.bandpassChordDetector = bandpassChordDetector(
       this.options.triggerChord,
@@ -122,14 +121,14 @@ export default class FlockingAgent {
     )
 
     // Start the LFO
-    // this.gainLFO.start()
+    this.gainLFO.start()
   }
 
   stop() {
     this.synth.triggerRelease()
 
     // Stop the LFO
-    // this.gainLFO.stop()
+    this.gainLFO.stop()
 
     // Remove overlay
     this.visuals.resetColor()
@@ -190,5 +189,6 @@ export default class FlockingAgent {
     debug('=========')
     debug(leftMeterValue, rightMeterValue, this.currentVelocity)
     debug(nextFrequency)
+    debug(this.synthGainNode.volume.param)
   }
 }
